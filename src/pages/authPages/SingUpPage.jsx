@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect  } from 'react';
 import { initializeApp } from 'firebase/app';
 import 'firebaseui/dist/firebaseui.css';
 import { auth, firebaseConfig } from '../../services/firebase';
@@ -29,7 +29,14 @@ const SignUpPage = () => {
   return (
     <div>
       <h2>Signup PAGE</h2>
-      <div id="firebaseui-auth-container"></div>
+      <div id="firebaseui-auth-container">
+        
+      </div>
+      <button type="button" className=''>
+           Already Signed Up <span className="singin">
+              Singin
+           </span>
+        </button>
     </div>
   );
 };
