@@ -36,14 +36,13 @@ export const registerWithEmailAndPassword = async (name, email, password) => {
   
       // You can access the created user data with `user`
       // Example: const userId = user.uid;
-  
       // Add user to Firestore collection
       const usersRef = collection(db, "users");
       await addDoc(usersRef, {
         uid: user.uid,
         name: name,
         email: email,
-        authProvider: "local", // Include the authProvider field
+        authProvider: "local",
       });
     } catch (err) {
       console.error(err);

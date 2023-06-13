@@ -1,13 +1,10 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import 'firebase/compat/auth'
+import * as firebaseui from 'firebaseui'
+import { useEffect, useState } from 'react'
+import firebase from 'firebase/compat/app'
+import 'firebaseui/dist/firebaseui.css';
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Environment variables
 const firebaseConfig = {
   apiKey: "AIzaSyDpIsXIFQNhkJ6O7rkz0eURYv9IJL3C9iU",
   authDomain: "wordle-game-superkuper.firebaseapp.com",
@@ -18,11 +15,36 @@ const firebaseConfig = {
   measurementId: "G-MB0Q207D79"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-export const auth = getAuth(app);
-// const analytics = getAnalytics(app);
+firebase.initializeApp(firebaseConfig)
 
-export { db, firebaseConfig };
-export default app;
+const auth = firebase.auth()
+
+export const Firebase = () => {
+  const [user, setUser] = useState<firebase.User | null>(null)
+
+  useEffect(() => {
+    const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth)
+
+    ui.start('.firebase-auth-container', {
+      signInFlow: 'popup',
+      signInOptions: [
+        {
+          provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        },
+      ],
+      signInSuccessUrl: '/page-router',
+    })
+  }, [])
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      setUser(firebaseUser)
+    })
+
+    return unsubscribe
+  }, [])
+
+  console.log('user', user)
+
+  return <div className="firebase-auth-container"></div>
+}
