@@ -1,33 +1,33 @@
+// export default App;
+import { useState, useEffect } from 'react';
+
+import Login from './pages/UserAuthPages/LoginPage';
+import Home from './pages/HomePage/HomePage';
+import firebase  from './services/firebase_test';
 import './App.css';
-import React, {useState} from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-
-import HomePage from './pages/HomePage/HomePage';
-import SignupPage from './pages/authPages/SingUpPage';
-import SignInPage from './pages/authPages/SignInPage';
-import {AuthProvider} from './auth/AuthContext'
-import GamePage from './pages/GamePage/GamePage';
-import ResponsiveAppBar from './component/Navbar/NavBar';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { AuthProvider } from "./auth/AuthContext"
 
 function App() {
-  
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      setUser(user);
+    })
+  }, [])
+
   return (
-    <BrowserRouter>
-      <AuthProvider >
-        <ResponsiveAppBar/>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/signin" element={<SignInPage />} />
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
+    <div className="app">
+      {user ? <Home user={user} /> : <Login/>}
+    </div>
   );
 }
 
-export default App;
+export default function Root() {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+}
