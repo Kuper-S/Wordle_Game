@@ -1,9 +1,9 @@
 import React from 'react'
 
-function scoreBoard() {
+function ScoreBoard() {
   return (
     <div>scoreBoard</div>
   )
 }
 
-export default scoreBoard
+export default ScoreBoard

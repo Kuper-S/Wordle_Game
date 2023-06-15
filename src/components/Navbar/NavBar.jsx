@@ -12,20 +12,19 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { useAuthValue } from "../../auth/AuthContext";
+import { useAuth } from '../../context/AuthContext';
 
-const pages = ['Game Rules', 'Scoreboard'];
-const settings = ['Profile', 'Dashboard', 'Logout'];
+const pages = ['Profile', 'Scoreboard'];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { user, avatar } = useAuthValue();
-
+  const { currentUser } = useAuth(); // Get the currentUser from the AuthContext
+  
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -43,7 +42,6 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-
           <Typography
             variant="h6"
             noWrap
@@ -59,7 +57,41 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            Wordle
+            WORDLE
+          </Typography>
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/profile"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 300,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            Profile
+          </Typography>
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/scoreboard"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 300,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            Scoreboard
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -98,7 +130,6 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
@@ -116,27 +147,26 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            Wordle
+            WORDLE
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
+            
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
+         
+            {currentUser && ( // Render the name only if currentUser exists
+              
+
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="AVATAR" src={avatar} />
+                <Avatar alt={currentUser.displayName} src="/static/images/avatar/2.jpg" />
+              <Box>
+              </Box>
               </IconButton>
             </Tooltip>
+              
+            )}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -160,21 +190,6 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          {user && (
-            <Typography
-              variant="body2"
-              noWrap
-              component="p"
-              sx={{
-                display: { xs: 'none', md: 'flex' },
-                alignItems: 'center',
-                ml: 2,
-                color: 'white',
-              }}
-            >
-              Hello, {user.displayName}
-            </Typography>
-          )}
         </Toolbar>
       </Container>
     </AppBar>

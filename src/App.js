@@ -1,40 +1,36 @@
-import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route , Navigate} from 'react-router-dom';
-import Login from './pages/UserAuthPages/LoginPage';
-import Register from './pages/UserAuthPages/RegisterPage';
+import React from 'react'
+import { Row, Col } from 'react-bootstrap';
+import SingUp from './pages/UserAuthPages/SingUp';
+import { Routes, Route } from 'react-router-dom';
+import LogIn from './pages/UserAuthPages/LogIn';
+import AuthProvider from './context/AuthContext';
+import Profile from './pages/ProfilePage/Profile';
+import PrivateRoute from './pages/UserAuthPages/PrivateRoute';
+import ForgetPassword from './pages/UserAuthPages/ForgetPassword';
+import ResponsiveAppBar from './components/Navbar/NavBar'
 import Home from './pages/HomePage/HomePage';
-import firebase from './services/firebase_test';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import ResponsiveAppBar from "./components/Navbar/NavBar";
-import { AuthProvider } from "./auth/AuthContext";
+import ScoreBoard from './pages/ScoreBoard/ScoreBoard';
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      setUser(user);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
   return (
-    <Router>
-      <AuthProvider>
-        <div className="app">
-          <ResponsiveAppBar />
-          <Routes>
-          <Route path="/" element={user ? <Home /> : <Login />} /> 
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </div>
-      </AuthProvider>
-    </Router>
+    <div className='container-fluid'>
+      <Row>
+          <div className=''>
+            <AuthProvider>
+            <ResponsiveAppBar/>
+              <Routes>
+                <Route path='/' element ={<Home/>}/>
+                <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
+                <Route path='/login' element={<LogIn />} />
+                <Route path='/signup' element={<SingUp />} />
+                <Route path='/forgetpassword' element={<ForgetPassword />} />
+                <Route path='/scoreboard' element={<ScoreBoard />} />
+              </Routes>
+            </AuthProvider>
+          </div>
+        
+      </Row>
+    </div>
   );
 }
 
