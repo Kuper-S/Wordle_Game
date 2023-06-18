@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth,firestore } from "../services/firebase";
+import { auth, firestore } from "../services/firebase";
 import { GoogleAuthProvider } from "firebase/auth";
 import { GithubAuthProvider } from "firebase/auth";
 
@@ -13,22 +13,44 @@ function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  const signup = async (email, password, avatar, nickname, score) => {
-  try {
-    const { user } = await auth.createUserWithEmailAndPassword(email, password);
-    // const userRef = firestore.collection('users').doc(user.uid);
-    // await userRef.set({
-    //   email,
-    //   avatar,
-    //   nickname,
-    //   score,
-    // });
-    return user;
-  } catch (error) {
-    throw new Error('Failed to sign up: ' + error.message);
-  }
-};
-
+  const signup = async (email, password, username) => {
+    try {
+      const { user } = await auth.createUserWithEmailAndPassword(email, password);
+      const userRef = firestore.collection("users").doc(user.uid);
+      await userRef.set({
+        email,
+        username,
+      });
+      
+      return user;
+    } catch (error) {
+      throw new Error("Failed to sign up: " + error.message);
+    }
+  };
+  
+  const updateUsername = async (newUsername) => {
+    if (!currentUser) {
+      throw new Error("No user is currently logged in");
+    }
+  
+    const userRef = firestore.collection("users").doc(currentUser.uid);
+  
+    try {
+      await userRef.update({
+        username: newUsername,
+      });
+  
+      // Optionally, you can update the currentUser state with the new username as well
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
+        username: newUsername,
+      }));
+    } catch (error) {
+      console.error("Error updating username:", error);
+      throw new Error("Failed to choose username: " + error.message);
+    }
+  };
+  
 
   const logIn = (email, password) => {
     return auth.signInWithEmailAndPassword(email, password);
@@ -79,6 +101,7 @@ function AuthProvider({ children }) {
     signInWithGithub,
     updateEmail,
     updatePassword,
+    updateUsername, 
   };
 
   return (

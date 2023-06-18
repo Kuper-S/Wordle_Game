@@ -1,7 +1,6 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
 import { Link, useNavigate } from 'react-router-dom';
-import { Alert, Button, Form } from 'react-bootstrap';
+import {  Button} from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,7 +9,7 @@ import './HomePage.css';
 const Home = () => {
   const { currentUser, logOut } = useAuth();
   const navigate = useNavigate();
-
+  
   const handleLogout = async () => {
     try {
       await logOut();

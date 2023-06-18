@@ -25,7 +25,8 @@ function Profile() {
 
     setLoading(false);
   };
-
+  console.log(currentUser.displayName);
+  console.log(currentUser.name);
   const onSubmit = async (data) => {
     if (data.password !== data.confirmPassword) {
       return setError("password not match");
@@ -43,6 +44,7 @@ function Profile() {
     if (data.password) {
       promises.push(updatePassword(data.password));
     }
+    if(data.username)
 
     Promise.all(promises)
       .then(() => {
@@ -83,6 +85,15 @@ function Profile() {
             {...register("password")}
             type="password"
             placeholder="Enter new Password"
+          />
+        
+        </Form.Group>
+        <Form.Group className="my-3">
+          <Form.Label>Change Username </Form.Label>
+          <Form.Control
+            {...register("username")}
+            type="name"
+            placeholder="Enter new Username"
           />
         </Form.Group>
         <Form.Group className="my-3">

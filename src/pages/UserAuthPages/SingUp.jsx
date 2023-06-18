@@ -21,12 +21,14 @@ function SingUp() {
     setLoading(true);
     try {
       setError("");
-      await signup(data.email, data.password);
+      const { email, password, username } = data;
+      await signup(email, password, username);
+      
       navigate("/", { replace: true });
     } catch {
       setError("Failed to create an account");
     }
-
+  
     setLoading(false);
   };
 
@@ -57,7 +59,15 @@ function SingUp() {
         <Form.Control
           {...register("confirmPassword")}
           type="password"
-          placeholder="Password"
+          placeholder="Confirm Password"
+        />
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Label>Username</Form.Label>
+        <Form.Control
+          {...register("username")}
+          type="text"
+          placeholder="Enter username"
         />
       </Form.Group>
       <Button
@@ -66,10 +76,10 @@ function SingUp() {
         variant="primary"
         type="submit"
       >
-        Sing Up
+        Sign Up
       </Button>
       <p className="text-center mt-3">
-        Already you have an account?{" "}
+        Already have an account?{" "}
         <Link className="text-decoration-none" to="/login">
           Log In
         </Link>
