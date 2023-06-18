@@ -7,11 +7,12 @@ import Keyboard from "./Keyboard";
 import { boardDefault, generateWordSet } from "./Words";
 import React, { useState, useEffect,createContext } from "react";
 import GameOver from "./GameOver";
-
+import { useAuth } from '../../context/AuthContext'
 ReactModal.setAppElement('#root');
 export const AppContext = createContext();
 
 function GamePage() {
+  const { currentUser, updateUserData } = useAuth();
   const [board, setBoard] = useState(boardDefault);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letter: 0 });
   const [wordSet, setWordSet] = useState(new Set());
@@ -22,6 +23,9 @@ function GamePage() {
     gameOver: false,
     guessedWord: false,
   });
+  const [numAttempts, setNumAttempts] = useState(0);
+  // get the Current user info:
+  
 
   useEffect(() => {
     generateWordSet().then((words) => {
@@ -30,27 +34,43 @@ function GamePage() {
     });
   }, []);
 
+ 
+
+
   const onEnter = () => {
     if (currAttempt.letter !== 5) return;
-  
+
     const enteredWord = board[currAttempt.attempt].join("");
-  
+
     if (wordSet.has(enteredWord.toLowerCase())) {
       setCurrAttempt({ attempt: currAttempt.attempt + 1, letter: 0 });
     } else {
-      toast.error("Word not found"); // Display error message using toast.error
+      toast.error("Word not found");
     }
-  
+
     if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
       setGameOver({ gameOver: true, guessedWord: true });
+
+      if (currentUser) {
+        updateUserData(currentUser.displayName, currAttempt.attempt + 1);
+      }
+
       return;
     }
-  
-    if (currAttempt.attempt === 5) {
+
+    setNumAttempts(numAttempts + 1);
+
+    if (numAttempts === 5) {
       setGameOver({ gameOver: true, guessedWord: false });
+
+      if (currentUser) {
+        updateUserData(currentUser.displayName, currAttempt.attempt + 1);
+      }
+
       return;
     }
   };
+
 
   const onDelete = () => {
     if (currAttempt.letter === 0) return;
@@ -70,6 +90,7 @@ function GamePage() {
       letter: currAttempt.letter + 1,
     });
   };
+  console.log('USER NAME' , currentUser);
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -80,7 +101,8 @@ function GamePage() {
   return (
     <div className="gamepage">
       <nav>
-        <h1>Wordle</h1>
+        
+        <h1 >{currentUser.displayName} You can DO IT!</h1> 
         <div className="tooltip-container">
           <FaQuestionCircle onClick={openModal} className="question-icon" />
         </div>
@@ -109,6 +131,7 @@ function GamePage() {
         <FaTimes onClick={closeModal} className="close-icon" />
       </ReactModal>
       <ToastContainer />
+      
       <AppContext.Provider
         value={{
           board,
@@ -124,7 +147,9 @@ function GamePage() {
           gameOver,
         }}
       >
+        
         <div className="game">
+        <p>Number of Attempts: {numAttempts}</p>
           <Board />
           {gameOver.gameOver ? <GameOver /> : <Keyboard />}
         </div>

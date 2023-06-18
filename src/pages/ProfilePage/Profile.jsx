@@ -59,8 +59,8 @@ function Profile() {
   };
 
   return (
-    <div className="w-100 d-flex flex-column gap-2 align-items-center">
-      <h2 className="text-center mb-2">Profile</h2>
+    <div className="profile-container">
+      
       <img
         className="user-image"
         src="image/UserAvatar.png"

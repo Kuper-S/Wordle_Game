@@ -20,6 +20,7 @@ function AuthProvider({ children }) {
       await userRef.set({
         email,
         username,
+        score: 0,
       });
       
       return user;
@@ -28,28 +29,37 @@ function AuthProvider({ children }) {
     }
   };
   
-  const updateUsername = async (newUsername) => {
+  const updateUserData = async (newUsername, score) => {
     if (!currentUser) {
       throw new Error("No user is currently logged in");
     }
   
+    // Check if the user document exists
     const userRef = firestore.collection("users").doc(currentUser.uid);
+    const doc = await userRef.get();
+    if (!doc.exists) {
+      throw new Error("User document does not exist");
+    }
   
+    // Update the user data in the Firestore database
     try {
       await userRef.update({
         username: newUsername,
+        score: score,
       });
   
-      // Optionally, you can update the currentUser state with the new username as well
+      // Optionally, you can update the currentUser state with the new username and score as well
       setCurrentUser((prevUser) => ({
         ...prevUser,
         username: newUsername,
+        score: score,
       }));
     } catch (error) {
-      console.error("Error updating username:", error);
-      throw new Error("Failed to choose username: " + error.message);
+      console.error("Error updating user data:", error);
+      throw new Error("Failed to update user data: " + error.message);
     }
   };
+  
   
 
   const logIn = (email, password) => {
@@ -101,7 +111,7 @@ function AuthProvider({ children }) {
     signInWithGithub,
     updateEmail,
     updatePassword,
-    updateUsername, 
+    updateUserData, 
   };
 
   return (
