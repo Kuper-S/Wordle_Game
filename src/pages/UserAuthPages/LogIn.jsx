@@ -122,7 +122,7 @@ function LogIn() {
           Sign in With Github
         </Button>
       </div>
-      <p className="text-center mt-3">
+      <p className="text-center mt-3 color-white" >
         Do you have account?{" "}
         <Link className="text-decoration-none" to="/signup">
           Sign Up

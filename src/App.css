@@ -13,12 +13,14 @@ body {
 }
 
 nav {
-  height: 60px;
+  height: 100px;
   width: 100%;
-  margin: 0;
+  padding-bottom: 20px;
   border-bottom: 1px solid grey;
   display: grid;
   place-items: center;
+  padding-left: 0; /* Reset padding */
+  padding-right: 0; /* Reset padding */
 }
 
 nav h1 {
@@ -33,7 +35,7 @@ nav h1 {
   height: calc(100vh - 170px);
   display: flex;
   align-items: center;
-  padding-top: 50px;
+  padding-top: 20px;
   flex-direction: column;
 }
 
@@ -131,7 +133,7 @@ nav h1 {
 }
 
 .modal-overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -146,11 +148,6 @@ nav h1 {
   text-align: center;
 }
 
-.question-icon {
-  cursor: pointer;
-  font-size: 20px;
-  color: #fff;
-}
 
 .profile-container {
     width: 50%;
@@ -164,7 +161,6 @@ nav h1 {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
 
 #big {
   width: 100px;

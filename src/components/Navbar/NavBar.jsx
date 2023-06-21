@@ -12,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useAuth } from '../../context/AuthContext';
-
+import { Link } from 'react-router-dom';
 const pages = ['Profile', 'Scoreboard'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -37,7 +37,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#8d5eab' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -58,23 +58,26 @@ function ResponsiveAppBar() {
           >
             WORDLE
           </Typography>
+          {currentUser && (
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/profile"
+            component={Link}
+            to="/profile"
             sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 300,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Profile
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 300,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+                }}
+            >
+                Profile
           </Typography>
+          )}
+
           <Typography
             variant="h6"
             noWrap

@@ -16,14 +16,15 @@ import Footer from './pages/Footer/Footer';
 
 function App() {
   return (
-    <div className='container-fluid'>
+    <div className='App'>
       <Row>
-          <div className='App'>
+          
             <AuthProvider>
             
             <ResponsiveAppBar/>
               <Routes>
                 <Route path='/' element ={<Home/>}/>
+                
                 <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
                 <Route path='/login' element={<LogIn />} />
                 <Route path='/signup' element={<SingUp />} />
@@ -34,7 +35,7 @@ function App() {
               
             </AuthProvider>
             
-          </div>
+        
         
       </Row>
       <Footer/>
