@@ -12,7 +12,7 @@ import ResponsiveAppBar from './components/Navbar/NavBar'
 import Home from './pages/HomePage/HomePage';
 import ScoreBoard from './pages/ScoreBoard/ScoreBoard';
 import GamePage from './pages/GamePage/GamePage'
-
+import Footer from './pages/Footer/Footer';
 
 function App() {
   return (
@@ -37,6 +37,7 @@ function App() {
           </div>
         
       </Row>
+      <Footer/>
     </div>
   );
 }
