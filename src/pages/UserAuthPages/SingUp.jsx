@@ -10,7 +10,8 @@ function SingUp() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
-  const { signup } = useAuth();
+  const { signup, signInWithGoogle } = useAuth();
+  
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -30,6 +31,18 @@ function SingUp() {
     }
   
     setLoading(false);
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setError("");
+      setLoading(true);
+      await signInWithGoogle();
+      navigate("/", { replace: true });
+    } catch {
+      setError("Failed to sign in with Google");
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,6 +90,14 @@ function SingUp() {
         type="submit"
       >
         Sign Up
+      </Button>
+      <Button
+        className="mt-3"
+        style={{ width: "100%" }}
+        variant="secondary"
+        onClick={handleGoogleSignIn}
+      >
+        Sign Up with Google
       </Button>
       <p className="text-center mt-3">
         Already have an account?{" "}

@@ -12,6 +12,9 @@ export const useAuth = () => {
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
+  const [scores, setScores] = useState([]);
+  const [scoreLoading, setScoreLoading] = useState(false);
+  const [scoreError, setScoreError] = useState('');
 
   const signup = async (email, password, username) => {
     try {
@@ -22,8 +25,13 @@ function AuthProvider({ children }) {
         username,
         score: 0,
       });
-      
-      return user;
+  
+      // Retrieve the user document again to get the updated user object with uid
+      const doc = await userRef.get();
+      if (doc.exists) {
+        const userData = doc.data();
+        return { uid: user.uid, ...userData };
+      }
     } catch (error) {
       throw new Error("Failed to sign up: " + error.message);
     }
@@ -91,6 +99,18 @@ function AuthProvider({ children }) {
   const updatePassword = (password) => {
     return currentUser.updatePassword(password);
   };
+  const fetchScores = async () => {
+    setScoreLoading(true);
+    try {
+      // Example code: Fetch scores from Firestore
+      const scoresData = await firestore.collection('scores').get();
+      const scores = scoresData.docs.map((doc) => doc.data());
+      setScores(scores);
+    } catch (error) {
+      setScoreError('Failed to fetch scores');
+    }
+    setScoreLoading(false);
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -98,8 +118,13 @@ function AuthProvider({ children }) {
       setLoading(false);
     });
 
+    fetchScores(); // Fetch scores when the component mounts
+
     return unsubscribe;
   }, []);
+
+
+  
 
   const value = {
     currentUser,
@@ -112,6 +137,7 @@ function AuthProvider({ children }) {
     updateEmail,
     updatePassword,
     updateUserData, 
+    fetchScores
   };
 
   return (

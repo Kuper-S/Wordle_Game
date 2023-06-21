@@ -26,37 +26,38 @@ function Profile() {
     setLoading(false);
   };
   console.log(currentUser.displayName);
-  console.log(currentUser.name);
+  console.log(currentUser.username);
+
   const onSubmit = async (data) => {
-    if (data.password !== data.confirmPassword) {
-      return setError("password not match");
-    }
+  if (data.password !== data.confirmPassword) {
+    return setError("password not match");
+  }
 
-    console.log(data);
+  const promises = [];
+  setLoading(true);
+  setError("");
 
-    const promises = [];
-    setLoading(true);
-    setError("");
+  if (currentUser.email !== data.email) {
+    promises.push(updateEmail(data.email));
+  }
+  if (data.password) {
+    promises.push(updatePassword(data.password));
+  }
+  if (currentUser.displayName !== data.username) {
+    promises.push(currentUser.updateProfile({ displayName: data.username }));
+  }
 
-    if (currentUser.email !== data.email) {
-      promises.push(updateEmail(data.email));
-    }
-    if (data.password) {
-      promises.push(updatePassword(data.password));
-    }
-    if(data.username)
-
-    Promise.all(promises)
-      .then(() => {
-        setMessage("Profile changed successfully");
-      })
-      .catch(() => {
-        setError("Failed to update account");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+  Promise.all(promises)
+    .then(() => {
+      setMessage("Profile changed successfully");
+    })
+    .catch(() => {
+      setError("Failed to update account");
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+};
 
   return (
     <div className="profile-container">

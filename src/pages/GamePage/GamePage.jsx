@@ -1,6 +1,7 @@
 import "../../App.css";
 import { ToastContainer, toast } from 'react-toastify';
 import ReactModal from 'react-modal';
+import Button from "react-bootstrap/Button";
 import { FaQuestionCircle, FaTimes } from 'react-icons/fa';
 import Board from "./Board";
 import Keyboard from "./Keyboard";
@@ -17,6 +18,7 @@ function GamePage() {
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letter: 0 });
   const [wordSet, setWordSet] = useState(new Set());
   const [correctWord, setCorrectWord] = useState("");
+  const [gameFinished, setGameFinished] = useState(false);
   const [disabledLetters, setDisabledLetters] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [gameOver, setGameOver] = useState({
@@ -24,7 +26,7 @@ function GamePage() {
     guessedWord: false,
   });
   const [numAttempts, setNumAttempts] = useState(0);
-  // get the Current user info:
+ 
   
 
   useEffect(() => {
@@ -34,39 +36,39 @@ function GamePage() {
     });
   }, []);
 
- 
-
 
   const onEnter = () => {
     if (currAttempt.letter !== 5) return;
-
+  
     const enteredWord = board[currAttempt.attempt].join("");
-
+  
     if (wordSet.has(enteredWord.toLowerCase())) {
       setCurrAttempt({ attempt: currAttempt.attempt + 1, letter: 0 });
     } else {
       toast.error("Word not found");
     }
-
+  
     if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
+      setGameFinished(true);
       setGameOver({ gameOver: true, guessedWord: true });
-
+  
       if (currentUser) {
         updateUserData(currentUser.displayName, currAttempt.attempt + 1);
       }
-
+  
       return;
     }
-
+  
     setNumAttempts(numAttempts + 1);
-
+  
     if (numAttempts === 5) {
+      setGameFinished(true);
       setGameOver({ gameOver: true, guessedWord: false });
-
+  
       if (currentUser) {
         updateUserData(currentUser.displayName, currAttempt.attempt + 1);
       }
-
+  
       return;
     }
   };
@@ -98,6 +100,20 @@ function GamePage() {
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
+  const handleRestartGame = () => {
+    setBoard(boardDefault);
+    setCurrAttempt({ attempt: 0, letter: 0 });
+    setDisabledLetters([]);
+    setGameOver({ gameOver: false, guessedWord: false });
+    setGameFinished(false);
+    setNumAttempts(0);
+  
+    // Clear the board by setting all tiles to empty strings
+    const emptyBoard = boardDefault.map((row) => row.map(() => ""));
+    setBoard(emptyBoard);
+  };
+  
   return (
     <div className="gamepage">
       <nav>
@@ -152,6 +168,13 @@ function GamePage() {
         <p>Number of Attempts: {numAttempts}</p>
           <Board />
           {gameOver.gameOver ? <GameOver /> : <Keyboard />}
+          {gameFinished && (
+              <div>
+                <Button variant="info">Show Solution</Button>
+              </div>
+            )}
+            <Button variant="danger" onClick={handleRestartGame}>Restart Game</Button>
+
         </div>
       </AppContext.Provider>
     </div>
