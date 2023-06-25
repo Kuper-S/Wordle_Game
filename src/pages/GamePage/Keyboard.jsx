@@ -44,6 +44,7 @@ function Keyboard() {
     },
     [currAttempt]
   );
+
   useEffect(() => {
     document.addEventListener("keydown", handleKeyboard);
 
@@ -52,24 +53,23 @@ function Keyboard() {
     };
   }, [handleKeyboard]);
 
-  
   return (
-    <div className="keyboard" onKeyDown={handleKeyboard}>
+    <div className="keyboard">
       <div className="line1">
-        {keys1.map((key, index) => {
-        return <Key key={index} keyVal={key} disabled={disabledLetters.includes(key)} />;
-        })}
+        {keys1.map((key, index) => (
+          <Key key={index} keyVal={key} disabled={disabledLetters.includes(key)} />
+        ))}
       </div>
       <div className="line2">
-        {keys2.map((key) => {
-          return <Key keyVal={key} disabled={disabledLetters.includes(key)} />;
-        })}
+        {keys2.map((key, index) => (
+          <Key key={index} keyVal={key} disabled={disabledLetters.includes(key)} />
+        ))}
       </div>
       <div className="line3">
         <Key keyVal={"ENTER"} bigKey />
-        {keys3.map((key) => {
-          return <Key keyVal={key} disabled={disabledLetters.includes(key)} />;
-        })}
+        {keys3.map((key, index) => (
+          <Key key={index} keyVal={key} disabled={disabledLetters.includes(key)} />
+        ))}
         <Key keyVal={"DELETE"} bigKey />
       </div>
     </div>

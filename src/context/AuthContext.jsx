@@ -14,7 +14,7 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [scores, setScores] = useState([]);
   const [scoreLoading, setScoreLoading] = useState(false);
-  const [scoreError, setScoreError] = useState('');
+  const [scoreError, setScoreError] = useState("");
 
   const signup = async (email, password, username) => {
     try {
@@ -25,7 +25,7 @@ function AuthProvider({ children }) {
         username,
         score: 0,
       });
-  
+
       // Retrieve the user document again to get the updated user object with uid
       const doc = await userRef.get();
       if (doc.exists) {
@@ -36,38 +36,48 @@ function AuthProvider({ children }) {
       throw new Error("Failed to sign up: " + error.message);
     }
   };
-  
-  const updateUserData = async (newUsername, score) => {
+
+  const updateUserData = async (newUsername, newScore) => {
     if (!currentUser) {
       throw new Error("No user is currently logged in");
     }
   
-    // Check if the user document exists
-    const userRef = firestore.collection("users").doc(currentUser.uid);
-    const doc = await userRef.get();
-    if (!doc.exists) {
-      throw new Error("User document does not exist");
-    }
-  
-    // Update the user data in the Firestore database
     try {
-      await userRef.update({
-        username: newUsername,
-        score: score,
-      });
+      // Check if the user document exists
+      const userRef = firestore.collection("users").doc(currentUser.uid);
+      const doc = await userRef.get();
+      if (doc.exists) {
+        // Update the user data in the Firestore database
+        await userRef.update({
+          username: newUsername || "", // Use empty string as default value if newUsername is undefined
+          score: newScore,
+        });
   
-      // Optionally, you can update the currentUser state with the new username and score as well
-      setCurrentUser((prevUser) => ({
-        ...prevUser,
-        username: newUsername,
-        score: score,
-      }));
+        // Update the currentUser state with the new username and score as well
+        setCurrentUser((prevUser) => ({
+          ...prevUser,
+          username: newUsername || "", // Use empty string as default value if newUsername is undefined
+          score: newScore,
+        }));
+      } else {
+        // Create a new user document
+        await userRef.set({
+          username: newUsername || "", // Use empty string as default value if newUsername is undefined
+          score: newScore,
+        });
+  
+        // Update the currentUser state with the new username and score as well
+        setCurrentUser((prevUser) => ({
+          ...prevUser,
+          username: newUsername || "", // Use empty string as default value if newUsername is undefined
+          score: newScore,
+        }));
+      }
     } catch (error) {
       console.error("Error updating user data:", error);
       throw new Error("Failed to update user data: " + error.message);
     }
   };
-  
   
 
   const logIn = (email, password) => {
@@ -81,7 +91,22 @@ function AuthProvider({ children }) {
   const resetPassword = (email) => {
     return auth.sendPasswordResetEmail(email);
   };
-
+  const updateProfile = async (displayName) => {
+    if (!currentUser) {
+      throw new Error("No user is currently logged in");
+    }
+  
+    try {
+      await auth.updateProfile(currentUser, { displayName });
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
+        displayName: displayName,
+      }));
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw new Error("Failed to update profile: " + error.message);
+    }
+  };
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     return auth.signInWithPopup(provider);
@@ -92,8 +117,13 @@ function AuthProvider({ children }) {
     return auth.signInWithPopup(provider);
   };
 
-  const updateEmail = (email) => {
-    return currentUser.updateEmail(email);
+  const updateEmail = async (email) => {
+    try {
+      await currentUser.updateEmail(email);
+    } catch (error) {
+      console.error("Error updating email:", error);
+      throw new Error("Failed to update email: " + error.message);
+    }
   };
 
   const updatePassword = (password) => {
@@ -103,18 +133,31 @@ function AuthProvider({ children }) {
     setScoreLoading(true);
     try {
       // Example code: Fetch scores from Firestore
-      const scoresData = await firestore.collection('scores').get();
+      const scoresData = await firestore.collection("scores").get();
       const scores = scoresData.docs.map((doc) => doc.data());
       setScores(scores);
     } catch (error) {
-      setScoreError('Failed to fetch scores');
+      setScoreError("Failed to fetch scores");
     }
     setScoreLoading(false);
+  };
+  const fetchUserData = async (user) => {
+    if (user) {
+      const userRef = firestore.collection("users").doc(user.uid);
+      const doc = await userRef.get();
+      if (doc.exists) {
+        setCurrentUser((prevUser) => ({
+          ...prevUser,
+          score: doc.data().score,
+        }));
+      }
+    }
   };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
+      fetchUserData(user);
       setLoading(false);
     });
 
@@ -122,9 +165,6 @@ function AuthProvider({ children }) {
 
     return unsubscribe;
   }, []);
-
-
-  
 
   const value = {
     currentUser,
@@ -136,14 +176,13 @@ function AuthProvider({ children }) {
     signInWithGithub,
     updateEmail,
     updatePassword,
-    updateUserData, 
-    fetchScores
+    updateUserData,
+    fetchScores,
+    updateProfile,
   };
 
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>
   );
 }
 

@@ -4,7 +4,7 @@ import { Facebook, Twitter, Google, Instagram, LinkedIn, GitHub } from '@mui/ico
 
 export default function Footer() {
   return (
-    <footer className="text-center text-white" style={{ backgroundColor: '#592f73' }}>
+    <div className="text-center text-white footer" style={{ backgroundColor: '#592f73' }}>
       <Container>
         <Grid container justifyContent="center">
           <Grid item>
@@ -35,6 +35,6 @@ export default function Footer() {
           © 2023 SuperKuper Wordle
         </Typography>
       </div>
-    </footer>
+    </div>
   );
 }

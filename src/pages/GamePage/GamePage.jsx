@@ -1,8 +1,6 @@
 import "../../App.css";
 import { ToastContainer, toast } from 'react-toastify';
-
 import Button from "react-bootstrap/Button";
-import { FaQuestionCircle } from 'react-icons/fa';
 import Board from "./Board";
 import Keyboard from "./Keyboard";
 import { boardDefault, generateWordSet } from "./Words";
@@ -10,6 +8,7 @@ import React, { useState, useEffect,createContext } from "react";
 import GameOver from "./GameOver";
 import { useAuth } from '../../context/AuthContext'
 import Modal from "../../components/Modals/Modal";
+
 export const AppContext = createContext();
 
 function GamePage() {
@@ -20,7 +19,7 @@ function GamePage() {
   const [correctWord, setCorrectWord] = useState("");
   const [gameFinished, setGameFinished] = useState(false);
   const [disabledLetters, setDisabledLetters] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  
   const [gameOver, setGameOver] = useState({
     gameOver: false,
     guessedWord: false,
@@ -93,13 +92,7 @@ function GamePage() {
     });
   };
   console.log('USER NAME' , currentUser);
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
+  
 
   const handleRestartGame = () => {
     setBoard(boardDefault);

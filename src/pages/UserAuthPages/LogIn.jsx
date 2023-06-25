@@ -52,8 +52,9 @@ function LogIn() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
-      <h1 className="text-center mb-4">Log In</h1>
+    <div className="login_page">
+    <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "50%" }}>
+      <h1 className="text-center mb-4 color-white">Log In</h1>
       {error && <Alert variant="danger">{error}</Alert>}
       {loading && <Loading />}
       <Form.Group className="mb-3">
@@ -129,6 +130,7 @@ function LogIn() {
         </Link>
       </p>
     </Form>
+    </div>
   );
 }
 

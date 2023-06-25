@@ -18,7 +18,6 @@ function App() {
   return (
     <div className='App'>
       <Row>
-          
             <AuthProvider>
             
             <ResponsiveAppBar/>
@@ -34,12 +33,13 @@ function App() {
               </Routes>
               
             </AuthProvider>
-            
+          
         
         
       </Row>
-      <Footer/>
+     
     </div>
+        
   );
 }
 

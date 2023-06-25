@@ -44,6 +44,7 @@ function Profile() {
     promises.push(updatePassword(data.password));
   }
   if (currentUser.displayName !== data.username) {
+    
     promises.push(currentUser.updateProfile({ displayName: data.username }));
   }
 
@@ -67,19 +68,10 @@ function Profile() {
         src="image/UserAvatar.png"
         alt="user"
       />
-      <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+      <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "50%" }}>
         {error && <Alert variant="danger">{error}</Alert>}
         {message && <Alert variant="success">{message}</Alert>}
         {loading && <Loading />}
-        <Form.Group className="my-3">
-          <Form.Label>Update Email address</Form.Label>
-          <Form.Control
-            {...register("email")}
-            type="email"
-            placeholder="Enter new email"
-            defaultValue={currentUser.email}
-          />
-        </Form.Group>
         <Form.Group className="my-3">
           <Form.Label>Update Password</Form.Label>
           <Form.Control

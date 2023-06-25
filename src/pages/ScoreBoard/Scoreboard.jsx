@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Alert, Spinner, Table, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,22 +9,13 @@ function ScoreBoard() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleUpdateScore = async (newScore) => {
-    setLoading(true);
-    try {
-      await updateUserData(currentUser.username, newScore);
-      setLoading(false);
-    } catch (error) {
-      setError('Failed to update score');
-      setLoading(false);
-    }
-  };
-
-  const handleToHomePage = async () =>{
+  const handleToHomePage = async () => {
     navigate('/');
   };
-  console.log('SCORE FROM SCOREBOARD' , currentUser.score);
+
+  console.log('SCORE FROM SCOREBOARD', currentUser.score);
   console.log(currentUser);
+
   return (
     <div className="scoreboard-container">
       <h1>Scoreboard</h1>
@@ -47,8 +38,10 @@ function ScoreBoard() {
               </tr>
             </tbody>
           </Table>
-          
-          <Button variant="success" onClick={handleToHomePage}>Back Home</Button>
+
+          <Button variant="success" onClick={handleToHomePage}>
+            Back Home
+          </Button>
         </>
       )}
     </div>
