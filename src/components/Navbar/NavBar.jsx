@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useState,useEffect}from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,14 +13,20 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import useUserData from "../../Hooks/useUserData";
 const pages = ['Profile', 'Scoreboard'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { currentUser } = useAuth(); // Get the currentUser from the AuthContext
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const { currentUser } = useAuth();
+  const userData = useUserData();
+
+  console.log(userData?.displayName);
+  console.log(userData?.username);
   
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -162,7 +168,7 @@ function ResponsiveAppBar() {
 
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={currentUser.displayName} src="/static/images/avatar/2.jpg" />
+                <Avatar alt={userData?.username} src="/static/images/avatar/2.jpg" />
               <Box>
               </Box>
               </IconButton>

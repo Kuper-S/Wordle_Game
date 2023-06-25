@@ -4,14 +4,25 @@ import { useAuth } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Loading from "../UserAuthPages/Loading";
+import { auth, firestore } from "../../services/firebase";
+import useUserData from "../../Hooks/useUserData";
 
 function Profile() {
+  const navigate = useNavigate();
+  const userData = useUserData();
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const { register, handleSubmit } = useForm();
   const { currentUser, logOut, updateEmail, updatePassword } = useAuth();
-  const navigate = useNavigate();
+  
+
+
+
+
+  console.log(userData?.displayName);
+  console.log(userData?.username);
 
   const handleLogout = async () => {
     setLoading(true);
@@ -25,40 +36,46 @@ function Profile() {
 
     setLoading(false);
   };
-  console.log(currentUser.displayName);
-  console.log(currentUser.username);
+  
 
   const onSubmit = async (data) => {
-  if (data.password !== data.confirmPassword) {
-    return setError("password not match");
-  }
-
-  const promises = [];
-  setLoading(true);
-  setError("");
-
-  if (currentUser.email !== data.email) {
-    promises.push(updateEmail(data.email));
-  }
-  if (data.password) {
-    promises.push(updatePassword(data.password));
-  }
-  if (currentUser.displayName !== data.username) {
-    
-    promises.push(currentUser.updateProfile({ displayName: data.username }));
-  }
-
-  Promise.all(promises)
-    .then(() => {
-      setMessage("Profile changed successfully");
-    })
-    .catch(() => {
-      setError("Failed to update account");
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-};
+    if (data.password !== data.confirmPassword) {
+      return setError("password not match");
+    }
+  
+    const promises = [];
+    setLoading(true);
+    setError("");
+  
+    if (currentUser.email !== data.email) {
+      promises.push(updateEmail(data.email));
+    }
+    if (data.password) {
+      promises.push(updatePassword(data.password));
+    }
+    if (currentUser.displayName !== data.username) {
+      promises.push(
+        auth.currentUser.updateProfile({ displayName: data.username })
+      );
+  
+      // Update the display name in Firestore as well
+      const userRef = firestore.collection("users").doc(currentUser.uid);
+      promises.push(userRef.update({ displayName: data.username }));
+    }
+  
+    Promise.all(promises)
+      .then(() => {
+        setMessage("Profile changed successfully");
+      })
+      .catch(() => {
+        setError("Failed to update account");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+  
+  
 
   return (
     <div className="profile-container">

@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 
-function SingUp() {
+function SignUp() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
@@ -46,7 +46,9 @@ function SingUp() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+    <div className="signin_page d-flex justify-content-center align-items-center">
+
+    <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "40%" }}>
       <h1 className="text-center mb-4">Sign Up</h1>
       {error && <Alert variant="danger">{error}</Alert>}
       {loading && <Loading />}
@@ -85,16 +87,16 @@ function SingUp() {
       </Form.Group>
       <Button
         className="mt-3"
-        style={{ width: "100%" }}
-        variant="primary"
+        style={{ width: "60%" }}
+        variant="success"
         type="submit"
       >
         Sign Up
       </Button>
       <Button
         className="mt-3"
-        style={{ width: "100%" }}
-        variant="secondary"
+        style={{ width: "60%" }}
+        variant="primary"
         onClick={handleGoogleSignIn}
       >
         Sign Up with Google
@@ -106,7 +108,8 @@ function SingUp() {
         </Link>
       </p>
     </Form>
+    </div>
   );
 }
 
-export default SingUp;
+export default SignUp;

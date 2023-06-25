@@ -52,8 +52,8 @@ function LogIn() {
   };
 
   return (
-    <div className="login_page">
-    <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "50%" }}>
+    <div className="login_page d-flex justify-content-center align-items-center">
+    <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "40%" }}>
       <h1 className="text-center mb-4 color-white">Log In</h1>
       {error && <Alert variant="danger">{error}</Alert>}
       {loading && <Loading />}

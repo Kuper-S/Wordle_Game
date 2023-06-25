@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Alert, Spinner, Table, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import useUserData from "../../Hooks/useUserData";
 
 function ScoreBoard() {
-  const { currentUser, updateUserData } = useAuth();
+  const { currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const userData = useUserData();
 
   const handleToHomePage = async () => {
     navigate('/');
   };
 
-  console.log('SCORE FROM SCOREBOARD', currentUser.score);
-  console.log(currentUser);
+  
+  
 
   return (
     <div className="scoreboard-container">
@@ -33,7 +35,7 @@ function ScoreBoard() {
             </thead>
             <tbody>
               <tr>
-                <td>{currentUser.displayName}</td>
+                <td>{userData?.username}</td>
                 <td>{currentUser.score}</td>
               </tr>
             </tbody>

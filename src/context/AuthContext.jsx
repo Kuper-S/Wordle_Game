@@ -17,25 +17,26 @@ function AuthProvider({ children }) {
   const [scoreError, setScoreError] = useState("");
 
   const signup = async (email, password, username) => {
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(email, password);
-      const userRef = firestore.collection("users").doc(user.uid);
-      await userRef.set({
-        email,
-        username,
-        score: 0,
-      });
+  try {
+    const { user } = await auth.createUserWithEmailAndPassword(email, password);
 
-      // Retrieve the user document again to get the updated user object with uid
-      const doc = await userRef.get();
-      if (doc.exists) {
-        const userData = doc.data();
-        return { uid: user.uid, ...userData };
-      }
-    } catch (error) {
-      throw new Error("Failed to sign up: " + error.message);
-    }
-  };
+    const userRef = firestore.collection("users").doc(user.uid);
+    const userData = {
+      email,
+      username,
+      score: 0,
+    };
+
+    await user.updateProfile({ displayName: username }); // Update display name in Firebase Authentication
+    await userRef.set(userData); // Create user document in Firestore
+
+    return { uid: user.uid, ...userData };
+  } catch (error) {
+    throw new Error("Failed to sign up: " + error.message);
+  }
+};
+
+  
 
   const updateUserData = async (newUsername, newScore) => {
     if (!currentUser) {
@@ -78,6 +79,7 @@ function AuthProvider({ children }) {
       throw new Error("Failed to update user data: " + error.message);
     }
   };
+  
   
 
   const logIn = (email, password) => {
