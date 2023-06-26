@@ -27,7 +27,6 @@ function GamePage() {
   const [numAttempts, setNumAttempts] = useState(0);
  
   
-
   useEffect(() => {
     generateWordSet().then((words) => {
       setWordSet(words.wordSet);
@@ -136,17 +135,17 @@ function GamePage() {
       >
         
         <div className="game">
+        
         <p>Number of Attempts: {numAttempts}</p>
           <Board />
           {gameOver.gameOver ? <GameOver /> : <Keyboard />}
           {gameFinished && (
-              <div>
-                <Button variant="info">Show Solution</Button>
-              </div>
-            )}
-            <Button variant="danger" onClick={handleRestartGame}>Restart Game</Button>
-
+        <div className="game-buttons">
+            <Button variant="info">Show Solution</Button>
         </div>
+        )}
+        <Button variant="danger" onClick={handleRestartGame}>Restart Game</Button>
+      </div>
       </AppContext.Provider>
     </div>
   );

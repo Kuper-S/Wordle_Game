@@ -4,13 +4,12 @@ import { Button, Container, Row, Col } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './HomePage.css';
-
+import useUserData from "../../Hooks/useUserData";
 
 const Home = () => {
   const { currentUser, logOut } = useAuth();
   const navigate = useNavigate();
-
+  const userData = useUserData();
   const handleLogout = async () => {
     try {
       await logOut();
@@ -19,44 +18,41 @@ const Home = () => {
       toast.error('Failed to log out');
     }
   };
-
+  console.log(userData?.displayName);
+  console.log(userData?.username);
   const handleToGame = async () => {
     navigate('/game');
   };
 
   return (
-    <Container className="home-container">
+    <Container className="home-container ">
       <ToastContainer />
       <Row className="justify-content-center">
-        <Col xs={12} md={6} className="text-center">
-          <h1>Welcome to the Home Page</h1>
+        <Col xs={12} md={2} className="text-center">
+          <h1>Welcome {userData?.displayName} Ready to Play?</h1>
           {currentUser && (
-            <>
-              <Link to="/profile">
-                <Button variant="primary" className="my-3">
-                  Go to Profile
-                </Button>
+            <div>
+              
+              <Button variant="info" onClick={handleToGame} className="mb-3">
+                To Game Page
+              </Button>
+              <Link to="/profile" className="mb-3">
+                <Button variant="primary">Go to Profile</Button>
               </Link>
-              <Button variant="info" onClick={handleToGame}>To Game Page</Button>
-
-              <Button variant="danger" onClick={handleLogout} className="my-3">
+              <Button variant="danger" onClick={handleLogout} className="mb-3">
                 Log Out
               </Button>
-            </>
+            </div>
           )}
           {!currentUser && (
-            <>
-              <Link to="/login">
-                <Button variant="primary" className="my-3">
-                  Log In
-                </Button>
+            <div>
+              <Link to="/login" className="mb-3">
+                <Button variant="primary">Log In</Button>
               </Link>
               <Link to="/signup">
-                <Button variant="secondary" className="my-3">
-                  Sign Up
-                </Button>
+                <Button variant="secondary">Sign Up</Button>
               </Link>
-            </>
+            </div>
           )}
         </Col>
       </Row>

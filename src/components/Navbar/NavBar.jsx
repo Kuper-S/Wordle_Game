@@ -15,7 +15,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import useUserData from "../../Hooks/useUserData";
 const pages = ['Profile', 'Scoreboard'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -43,10 +43,11 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#8d5eab' }}>
+    <div className="nav-container">
+    <AppBar position="fixed" sx={{ backgroundColor: '#8d5eab' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }} />
           <Typography
             variant="h6"
             noWrap
@@ -163,11 +164,11 @@ function ResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 0 }}>
          
-            {currentUser && ( // Render the name only if currentUser exists
+            {currentUser && ( 
               
 
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 2 }}>
                 <Avatar alt={userData?.username} src="/static/images/avatar/2.jpg" />
               <Box>
               </Box>
@@ -201,6 +202,7 @@ function ResponsiveAppBar() {
         </Toolbar>
       </Container>
     </AppBar>
+    </div>
   );
 }
 

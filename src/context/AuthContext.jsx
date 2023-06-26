@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth, firestore } from "../services/firebase";
+import { auth, firestore, db} from "../services/firebase";
 import { GoogleAuthProvider } from "firebase/auth";
 import { GithubAuthProvider } from "firebase/auth";
+import { collection, getDocs } from 'firebase/firestore';
+
 
 export const AuthContext = createContext();
 
@@ -10,75 +12,85 @@ export const useAuth = () => {
 };
 
 function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState(null); // Set initial value to null
   const [loading, setLoading] = useState(true);
   const [scores, setScores] = useState([]);
   const [scoreLoading, setScoreLoading] = useState(false);
   const [scoreError, setScoreError] = useState("");
 
   const signup = async (email, password, username) => {
+    try {
+      const { user } = await auth.createUserWithEmailAndPassword(email, password);
+  
+      const userRef = firestore.collection("users").doc(user.uid);
+      const userData = {
+        email,
+        username,
+        score: 0,
+        attempts: 0, // Add the attempts variable with an initial value of 0
+        guessit: false, // Add the guessit variable with an initial value of false
+      };
+  
+      await user.updateProfile({ displayName: username }); // Update display name in Firebase Authentication
+      await userRef.set(userData); // Create user document in Firestore
+  
+      return { uid: user.uid, ...userData };
+    } catch (error) {
+      throw new Error("Failed to sign up: " + error.message);
+    }
+  };
+  
+
+const updateUserData = async (newUsername, newScore, newAttempts, newGuessIt) => {
+  if (!currentUser) {
+    throw new Error("No user is currently logged in");
+  }
+
   try {
-    const { user } = await auth.createUserWithEmailAndPassword(email, password);
+    // Check if the user document exists
+    const userRef = firestore.collection("users").doc(currentUser.uid);
+    const doc = await userRef.get();
+    if (doc.exists) {
+      // Update the user data in the Firestore database
+      await userRef.update({
+        username: newUsername || "", // Use empty string as default value if newUsername is undefined
+        score: newScore,
+        attempts: newAttempts,
+        guessit: newGuessIt,
+      });
 
-    const userRef = firestore.collection("users").doc(user.uid);
-    const userData = {
-      email,
-      username,
-      score: 0,
-    };
+      // Update the currentUser state with the new values
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
+        username: newUsername || "", // Use empty string as default value if newUsername is undefined
+        score: newScore,
+        attempts: newAttempts,
+        guessit: newGuessIt,
+      }));
+    } else {
+      // Create a new user document
+      await userRef.set({
+        username: newUsername || "", // Use empty string as default value if newUsername is undefined
+        score: newScore,
+        attempts: newAttempts,
+        guessit: newGuessIt,
+      });
 
-    await user.updateProfile({ displayName: username }); // Update display name in Firebase Authentication
-    await userRef.set(userData); // Create user document in Firestore
-
-    return { uid: user.uid, ...userData };
+      // Update the currentUser state with the new values
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
+        username: newUsername || "", // Use empty string as default value if newUsername is undefined
+        score: newScore,
+        attempts: newAttempts,
+        guessit: newGuessIt,
+      }));
+    }
   } catch (error) {
-    throw new Error("Failed to sign up: " + error.message);
+    console.error("Error updating user data:", error);
+    throw new Error("Failed to update user data: " + error.message);
   }
 };
 
-  
-
-  const updateUserData = async (newUsername, newScore) => {
-    if (!currentUser) {
-      throw new Error("No user is currently logged in");
-    }
-  
-    try {
-      // Check if the user document exists
-      const userRef = firestore.collection("users").doc(currentUser.uid);
-      const doc = await userRef.get();
-      if (doc.exists) {
-        // Update the user data in the Firestore database
-        await userRef.update({
-          username: newUsername || "", // Use empty string as default value if newUsername is undefined
-          score: newScore,
-        });
-  
-        // Update the currentUser state with the new username and score as well
-        setCurrentUser((prevUser) => ({
-          ...prevUser,
-          username: newUsername || "", // Use empty string as default value if newUsername is undefined
-          score: newScore,
-        }));
-      } else {
-        // Create a new user document
-        await userRef.set({
-          username: newUsername || "", // Use empty string as default value if newUsername is undefined
-          score: newScore,
-        });
-  
-        // Update the currentUser state with the new username and score as well
-        setCurrentUser((prevUser) => ({
-          ...prevUser,
-          username: newUsername || "", // Use empty string as default value if newUsername is undefined
-          score: newScore,
-        }));
-      }
-    } catch (error) {
-      console.error("Error updating user data:", error);
-      throw new Error("Failed to update user data: " + error.message);
-    }
-  };
   
   
 
@@ -113,7 +125,21 @@ function AuthProvider({ children }) {
     const provider = new GoogleAuthProvider();
     return auth.signInWithPopup(provider);
   };
-
+  const logUserScores = async () => {
+    try {
+      const usersCollectionRef = collection(db, 'users');
+      const querySnapshot = await getDocs(usersCollectionRef);
+  
+      querySnapshot.forEach((doc) => {
+        const user = doc.data();
+        const score = user.score;
+        console.log(score);
+      });
+    } catch (error) {
+      console.error('Error retrieving user scores:', error);
+    }
+  };
+  logUserScores();
   const signInWithGithub = () => {
     const provider = new GithubAuthProvider();
     return auth.signInWithPopup(provider);
@@ -181,6 +207,8 @@ function AuthProvider({ children }) {
     updateUserData,
     fetchScores,
     updateProfile,
+    logUserScores,
+    
   };
 
   return (
