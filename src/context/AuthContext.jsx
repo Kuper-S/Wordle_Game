@@ -133,7 +133,7 @@ const updateUserData = async (newUsername, newScore, newAttempts, newGuessIt) =>
       querySnapshot.forEach((doc) => {
         const user = doc.data();
         const score = user.score;
-        console.log(score);
+       
       });
     } catch (error) {
       console.error('Error retrieving user scores:', error);

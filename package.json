@@ -16,6 +16,7 @@
     "dompurify": "^3.0.3",
     "firebase": "^9.22.2",
     "firebaseui": "^6.0.2",
+    "framer-motion": "^10.12.17",
     "mdb-react-ui-kit": "^6.1.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",

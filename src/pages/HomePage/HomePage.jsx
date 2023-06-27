@@ -34,7 +34,7 @@ const Home = () => {
             <div>
               
               <Button variant="info" onClick={handleToGame} className="mb-3">
-                To Game Page
+                NEW GAME
               </Button>
               <Link to="/profile" className="mb-3">
                 <Button variant="primary">Go to Profile</Button>
