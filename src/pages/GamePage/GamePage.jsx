@@ -64,7 +64,7 @@ function GamePage() {
       setGameOver({ gameOver: true, guessedWord: false });
   
       if (currentUser) {
-        updateUserData(currentUser.displayName, currAttempt.attempt + 1);
+        updateUserData(currentUser.displayName, numAttempts + 1);
       }
   
       return;

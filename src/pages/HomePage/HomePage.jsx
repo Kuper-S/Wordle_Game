@@ -18,8 +18,7 @@ const Home = () => {
       toast.error('Failed to log out');
     }
   };
-  console.log(userData?.displayName);
-  console.log(userData?.username);
+  
   const handleToGame = async () => {
     navigate('/game');
   };

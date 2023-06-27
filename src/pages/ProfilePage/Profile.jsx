@@ -16,13 +16,9 @@ function Profile() {
   const [message, setMessage] = useState("");
   const { register, handleSubmit } = useForm();
   const { currentUser, logOut, updateEmail, updatePassword } = useAuth();
+
+
   
-
-
-
-
-  console.log(userData?.displayName);
-  console.log(userData?.username);
 
   const handleLogout = async () => {
     setLoading(true);
@@ -75,7 +71,9 @@ function Profile() {
       });
   };
   
-  
+  const handleToHomePage = async () => {
+    navigate('/');
+  };
 
   return (
     <div className="profile-container">
@@ -124,6 +122,9 @@ function Profile() {
             onClick={handleLogout}
           >
             Log Out
+          </Button>
+          <Button variant="success" onClick={handleToHomePage}>
+            HOME
           </Button>
         </div>
       </Form>

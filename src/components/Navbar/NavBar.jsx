@@ -23,9 +23,6 @@ function ResponsiveAppBar() {
   const { currentUser } = useAuth();
   const userData = useUserData();
 
-  console.log(userData?.displayName);
-  console.log(userData?.username);
-  
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);

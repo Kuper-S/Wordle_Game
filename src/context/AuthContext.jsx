@@ -27,12 +27,12 @@ function AuthProvider({ children }) {
         email,
         username,
         score: 0,
-        attempts: 0, // Add the attempts variable with an initial value of 0
-        guessit: false, // Add the guessit variable with an initial value of false
+        attempts: 0, 
+        guessit: false, 
       };
   
-      await user.updateProfile({ displayName: username }); // Update display name in Firebase Authentication
-      await userRef.set(userData); // Create user document in Firestore
+      await user.updateProfile({ displayName: username }); 
+      await userRef.set(userData); 
   
       return { uid: user.uid, ...userData };
     } catch (error) {

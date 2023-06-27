@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import AuthProvider, { useAuth } from './context/AuthContext';
 import ResponsiveAppBar from './components/Navbar/NavBar';
@@ -10,13 +10,16 @@ import ForgetPassword from './pages/UserAuthPages/ForgetPassword';
 import ScoreBoard from './pages/ScoreBoard/ScoreBoard';
 import GamePage from './pages/GamePage/GamePage';
 import Footer from './pages/Footer/Footer';
-import Landing from "./pages/LandingPage/Landing"
+import Landing from "./pages/LandingPage/Landing";
+import useUserData from './Hooks/useUserData';
 
 function App() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const userData = useUserData()
+  console.log(userData);
   
-  console.log(currentUser);
+  console.log(currentUser._delegate.uid);
   return (
     <div className="App">
       <AuthProvider>

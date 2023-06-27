@@ -16,7 +16,7 @@ const useUserData = () => {
 
           if (userDoc.exists) {
             const userData = userDoc.data();
-            setUserData(userData);
+            setUserData({ uid: currentUser.uid, ...userData });
           }
         } catch (error) {
           console.error('Failed to fetch user data:', error);
@@ -29,5 +29,6 @@ const useUserData = () => {
 
   return userData;
 };
+
 
 export default useUserData;
