@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import { BrowserRouter } from 'react-router-dom';
-import AuthProvider, { useAuth } from './context/AuthContext';
+import AuthProvider from './context/AuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

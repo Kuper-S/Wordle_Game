@@ -1,4 +1,4 @@
-import React  from 'react';
+import React , { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import AuthProvider, { useAuth } from './context/AuthContext';
 import ResponsiveAppBar from './components/Navbar/NavBar';
@@ -11,15 +11,17 @@ import ScoreBoard from './pages/ScoreBoard/ScoreBoard';
 import GamePage from './pages/GamePage/GamePage';
 import Footer from './pages/Footer/Footer';
 import Landing from "./pages/LandingPage/Landing";
-import useUserData from './Hooks/useUserData';
+import addWordsToFirestore from './services/addWords';
+
 
 function App() {
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
-  const userData = useUserData()
-  console.log(userData);
+  const navigate = useNavigate();   
   
-  console.log(currentUser._delegate.uid);
+    useEffect(() => {
+      // Call the function to add words to Firestore
+      addWordsToFirestore();
+    }, []);
   return (
     <div className="App">
       <AuthProvider>
@@ -33,7 +35,7 @@ function App() {
           <Route path="/scoreboard" element={<ScoreBoard />} />
           <Route path="/game" element={<GamePage />} />
           {currentUser ? (
-            <Route path="/profile" element={<Profile />} />
+            <Route path={`/profile`} element={<Profile />} />
           ) : (
             <Route
               path="/"

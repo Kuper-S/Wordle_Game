@@ -19,21 +19,25 @@ function GamePage() {
   const [correctWord, setCorrectWord] = useState("");
   const [gameFinished, setGameFinished] = useState(false);
   const [disabledLetters, setDisabledLetters] = useState([]);
-  
   const [gameOver, setGameOver] = useState({
     gameOver: false,
     guessedWord: false,
   });
   const [numAttempts, setNumAttempts] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [wordList, setWordList] = useState([]);
  
-  
+  console.log(correctWord)
+
   useEffect(() => {
     generateWordSet().then((words) => {
-      setWordSet(words.wordSet);
+      setWordList(words.wordSet);
       setCorrectWord(words.todaysWord);
+      setNumAttempts(0);
+      setWordIndex(0);
     });
   }, []);
-
+  
 
   const onEnter = () => {
     if (currAttempt.letter !== 5) return;
@@ -49,14 +53,21 @@ function GamePage() {
     if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
       setGameFinished(true);
       setGameOver({ gameOver: true, guessedWord: true });
-  
+      const newGuessIt = true;
       if (currentUser) {
-        updateUserData(currentUser.displayName, currAttempt.attempt + 1);
+        updateUserData(
+          currentUser.displayName,
+          currAttempt.attempt + 1,
+          numAttempts + 1,
+          newGuessIt
+        );
       }
+  
+      // Move to the next word
+      handleNextWord();
   
       return;
     }
-  
     setNumAttempts(numAttempts + 1);
   
     if (numAttempts === 5) {
@@ -66,6 +77,9 @@ function GamePage() {
       if (currentUser) {
         updateUserData(currentUser.displayName, numAttempts + 1);
       }
+  
+      // Move to the next word
+      handleNextWord();
   
       return;
     }
@@ -105,9 +119,22 @@ function GamePage() {
     const emptyBoard = boardDefault.map((row) => row.map(() => ""));
     setBoard(emptyBoard);
   };
-  
+  const handleNextWord = () => {
+    if (wordList.length > 0 && wordIndex < wordList.length - 1) {
+    setWordIndex(wordIndex + 1);
+    setBoard(boardDefault);
+    setCurrAttempt({ attempt: 0, letter: 0 });
+    setDisabledLetters([]);
+    setGameOver({ gameOver: false, guessedWord: false });
+    setGameFinished(false);
+    setNumAttempts(0);
+  } else {
+    // All words guessed, end the game or show a message
+  }
+};
   return (
     <div className="gamepage">
+      <div className ="game-container">
     <Modal/>
       <nav>
         
@@ -136,17 +163,19 @@ function GamePage() {
         
         <div className="game">
         
-        <p>Number of Attempts: {numAttempts}</p>
+        <p className="attempts">Number of Attempts: {numAttempts}</p>
           <Board />
           {gameOver.gameOver ? <GameOver /> : <Keyboard />}
           {gameFinished && (
         <div className="game-buttons">
-            <Button variant="info">Show Solution</Button>
-        </div>
+          <Button variant="info">Show Solution</Button>
+          <Button variant="info" onClick={handleNextWord}>Next Word</Button>
+          </div>
         )}
         <Button variant="danger" onClick={handleRestartGame}>Restart Game</Button>
       </div>
       </AppContext.Provider>
+      </div>
     </div>
   );
 }

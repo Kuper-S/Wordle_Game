@@ -2,23 +2,18 @@ import React, { useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import Loading from "../UserAuthPages/Loading";
 import { auth, firestore } from "../../services/firebase";
 import useUserData from "../../Hooks/useUserData";
-
 function Profile() {
   const navigate = useNavigate();
   const userData = useUserData();
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const { register, handleSubmit } = useForm();
   const { currentUser, logOut, updateEmail, updatePassword } = useAuth();
-
-
-  
 
   const handleLogout = async () => {
     setLoading(true);
@@ -54,11 +49,11 @@ function Profile() {
         auth.currentUser.updateProfile({ displayName: data.username })
       );
   
-      // Update the display name in Firestore as well
+     
       const userRef = firestore.collection("users").doc(currentUser.uid);
       promises.push(userRef.update({ displayName: data.username }));
     }
-  
+    
     Promise.all(promises)
       .then(() => {
         setMessage("Profile changed successfully");
@@ -74,10 +69,12 @@ function Profile() {
   const handleToHomePage = async () => {
     navigate('/');
   };
+  
 
+  
   return (
     <div className="profile-container">
-      
+      <h2>{userData?.username}</h2>
       <img
         className="user-image"
         src="image/UserAvatar.png"
@@ -97,14 +94,6 @@ function Profile() {
         
         </Form.Group>
         <Form.Group className="my-3">
-          <Form.Label>Change Username </Form.Label>
-          <Form.Control
-            {...register("username")}
-            type="name"
-            placeholder="Enter new Username"
-          />
-        </Form.Group>
-        <Form.Group className="my-3">
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             {...register("confirmPassword")}
@@ -112,6 +101,15 @@ function Profile() {
             placeholder="Confirm Password"
           />
         </Form.Group>
+        <Form.Group className="my-3">
+          <Form.Label>Change Username </Form.Label>
+          <Form.Control
+            {...register("username")}
+            type="name"
+            placeholder="Enter new Username"
+          />
+        </Form.Group>
+        
         <div className="d-flex gap-2 justify-content-center align-items-center">
           <Button type="submit" className="w-100 mt-2" variant="primary">
             Update Profile

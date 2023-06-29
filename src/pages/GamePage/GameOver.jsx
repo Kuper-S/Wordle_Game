@@ -3,17 +3,13 @@ import { AppContext } from "./GamePage";
 
 function GameOver() {
   const {
-    board,
-    setBoard,
     currAttempt,
     gameOver,
-    onSelectLetter,
     correctWord,
-    onDelete,
   } = useContext(AppContext);
   return (
     <div className="gameOver">
-      <h3>
+      <h3 >
         {gameOver.guessedWord
           ? "You Correctly Guessed the Wordle"
           : "You Failed to Guess the Word"}
