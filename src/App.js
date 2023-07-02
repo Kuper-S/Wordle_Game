@@ -11,24 +11,20 @@ import ScoreBoard from './pages/ScoreBoard/ScoreBoard';
 import GamePage from './pages/GamePage/GamePage';
 import Footer from './pages/Footer/Footer';
 import Landing from "./pages/LandingPage/Landing";
-import addWordsToFirestore from './services/addWords';
+
 
 
 function App() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();   
-  
-    useEffect(() => {
-      // Call the function to add words to Firestore
-      addWordsToFirestore();
-    }, []);
+
   return (
     <div className="App">
       <AuthProvider>
         <ResponsiveAppBar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/landing" element={<Landing />} />
+          <Route path="/" element={<Landing />} />
+          {currentUser && <Route path="/home" element={<Home />} />}
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgetpassword" element={<ForgetPassword />} />
@@ -53,3 +49,4 @@ function App() {
 }
 
 export default App;
+

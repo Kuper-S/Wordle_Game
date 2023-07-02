@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
-import { AppContext } from "./GamePage";
+import { GameContext } from "./GamePage";
 
 function GameOver() {
   const {
     currAttempt,
     gameOver,
     correctWord,
-  } = useContext(AppContext);
+  } = useContext(GameContext);
+
+  
   return (
     <div className="gameOver">
       <h3 >

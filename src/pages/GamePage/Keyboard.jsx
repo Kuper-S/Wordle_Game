@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useContext } from "react";
 import Key from "./Key";
-import { AppContext } from "./GamePage";
+import { GameContext } from "./GamePage";
 
 function Keyboard() {
   const keys1 = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
@@ -12,16 +12,22 @@ function Keyboard() {
     disabledLetters,
     currAttempt,
     gameOver,
+    gameFinished,
     onSelectLetter,
     onEnter,
     onDelete,
-  } = useContext(AppContext);
+    handleNextWord,
+  } = useContext(GameContext);
 
   const handleKeyboard = useCallback(
     (event) => {
       if (gameOver.gameOver) return;
       if (event.key === "Enter") {
-        onEnter();
+        if (gameFinished) {
+          handleNextWord();
+        } else {
+          onEnter();
+        }
       } else if (event.key === "Backspace") {
         onDelete();
       } else {
@@ -42,7 +48,7 @@ function Keyboard() {
         });
       }
     },
-    [currAttempt]
+    [gameOver.gameOver, gameFinished, handleNextWord, onEnter, onDelete, keys1, keys2, keys3, onSelectLetter]
   );
 
   useEffect(() => {

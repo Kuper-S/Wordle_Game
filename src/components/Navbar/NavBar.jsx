@@ -67,7 +67,7 @@ function ResponsiveAppBar() {
               variant="h6"
               noWrap
               component="a"
-              href="/"
+              href="/home"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -163,7 +163,7 @@ function ResponsiveAppBar() {
               {currentUser && (
                 <Tooltip title="Open settings">
                   <IconButton  onClick={handleOpenUserMenu} sx={{ p: 2 }}>
-                    <Avatar  alt={userData?.username} src="/static/images/avatar/2.jpg" />
+                    <Avatar  alt={currentUser.displayName} src="/static/images/avatar/2.jpg" />
                     <Box></Box>
                   </IconButton>
                 </Tooltip>

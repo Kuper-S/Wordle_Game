@@ -5,16 +5,18 @@ import { useForm } from "react-hook-form";
 import { useNavigate,useParams } from "react-router-dom";
 import Loading from "../UserAuthPages/Loading";
 import { auth, firestore } from "../../services/firebase";
-import useUserData from "../../Hooks/useUserData";
+
 function Profile() {
   const navigate = useNavigate();
-  const userData = useUserData();
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const { register, handleSubmit } = useForm();
   const { currentUser, logOut, updateEmail, updatePassword } = useAuth();
-
+  console.log(currentUser.displayName);
+  
+  console.log('HERE PROFILE');
   const handleLogout = async () => {
     setLoading(true);
     setError("");
@@ -67,14 +69,14 @@ function Profile() {
   };
   
   const handleToHomePage = async () => {
-    navigate('/');
+    navigate('/home');
   };
   
 
   
   return (
     <div className="profile-container">
-      <h2>{userData?.username}</h2>
+      <h2>{currentUser?.displayName}</h2>
       <img
         className="user-image"
         src="image/UserAvatar.png"

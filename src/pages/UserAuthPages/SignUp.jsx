@@ -25,7 +25,7 @@ function SignUp() {
       const { email, password, username } = data;
       await signup(email, password, username);
       
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     } catch {
       setError("Failed to create an account");
     }
@@ -38,7 +38,7 @@ function SignUp() {
       setError("");
       setLoading(true);
       await signInWithGoogle();
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     } catch {
       setError("Failed to sign in with Google");
       setLoading(false);

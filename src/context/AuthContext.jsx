@@ -19,63 +19,58 @@ function AuthProvider({ children }) {
 
       const userRef = firestore.collection("users").doc(user.uid);
       const userData = {
-        email,
-        username,
+        name: username,
+        wordsGuessed: [],
         score: 0,
-        attempts: 0,
-        guessit: false,
+        highestScore: 0,
       };
-
       await user.updateProfile({ displayName: username });
       await userRef.set(userData);
-
+  
       return { uid: user.uid, ...userData };
     } catch (error) {
       throw new Error("Failed to sign up: " + error.message);
     }
   };
-
-  const updateUserData = async (newUsername, newScore, newAttempts, newGuessIt) => {
+  
+  const updateUserData = async (newUsername, newAttempts, newGuessIt) => {
     if (!currentUser) {
       throw new Error("No user is currently logged in");
     }
-
+  
     try {
-      // Check if the user document exists
       const userRef = firestore.collection("users").doc(currentUser.uid);
       const doc = await userRef.get();
       if (doc.exists) {
-        // Create an object to hold the updated user data
+        const userData = doc.data();
+        const updatedWordsGuessed = [...userData.wordsGuessed];
+  
+        // Add new word and attempts to wordsGuessed array
+        if (newAttempts !== undefined && newGuessIt !== undefined) {
+          const newWordGuessed = {
+            word: newUsername,
+            attempts: newAttempts,
+          };
+          updatedWordsGuessed.push(newWordGuessed);
+        }
+  
+        const numWordsGuessed = updatedWordsGuessed.length;
+        const totalAttempts = updatedWordsGuessed.reduce((total, word) => total + word.attempts, 0);
+        const score = numWordsGuessed + totalAttempts;
+        const highestScore = Math.max(score, userData.highestScore || 0); // Compare current score with existing highest score
+  
         const updatedUserData = {
-          username: newUsername || "", // Use empty string as default value if newUsername is undefined
-          score: newScore !== undefined ? newScore : 0,
-          attempts: newAttempts !== undefined ? newAttempts : 0, // Set 0 as default value if newAttempts is undefined
-          guessit: newGuessIt !== undefined ? newGuessIt : false, // Set false as default value if newGuessIt is undefined
+          name: newUsername || userData.name,
+          wordsGuessed: updatedWordsGuessed,
+          score: score,
+          highestScore: highestScore,
         };
-
-        // Update the user data in the Firestore database
+  
         await userRef.update(updatedUserData);
-
-        // Update the currentUser state with the new values
+  
         setCurrentUser((prevUser) => ({
           ...prevUser,
           ...updatedUserData,
-        }));
-      } else {
-        // Create a new user document
-        const userData = {
-          username: newUsername || "", // Use empty string as default value if newUsername is undefined
-          score: newScore !== undefined ? newScore : 0,
-          attempts: newAttempts !== undefined ? newAttempts : 0, // Set 0 as default value if newAttempts is undefined
-          guessit: newGuessIt !== undefined ? newGuessIt : false, // Set false as default value if newGuessIt is undefined
-        };
-
-        await userRef.set(userData);
-
-        // Update the currentUser state with the new values
-        setCurrentUser((prevUser) => ({
-          ...prevUser,
-          ...userData,
         }));
       }
     } catch (error) {

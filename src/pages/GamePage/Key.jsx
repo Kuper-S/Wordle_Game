@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { AppContext } from "./GamePage";
+import { GameContext } from "./GamePage";
 function Key({ keyVal, bigKey, disabled }) {
   const { gameOver, onSelectLetter, onDelete, onEnter } =
-    useContext(AppContext);
+    useContext(GameContext);
 
   const selectLetter = () => {
     if (gameOver.gameOver) return;

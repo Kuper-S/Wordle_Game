@@ -18,7 +18,7 @@ function LogIn() {
     try {
       setError("");
       await logIn(data.email, data.password);
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     } catch {
       setError("Failed to log in");
     }
@@ -31,7 +31,7 @@ function LogIn() {
     try {
       setError("");
       await signInWithGoogle();
-      navigate("/");
+      navigate("/home");
     } catch {
       setError("Failed to log in With Google");
     }
@@ -44,7 +44,7 @@ function LogIn() {
     try {
       setError("");
       await signInWithGithub();
-      navigate("/");
+      navigate("/home");
     } catch {
       setError("Failed to log in With Github");
     }

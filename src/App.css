@@ -176,7 +176,10 @@ nav h1 {
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
 }
-
+.game-buttons{
+  padding: 20px;
+  
+}
 .modal {
   position:relative;
   transform: translate(-50%, -50%);

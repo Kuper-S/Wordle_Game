@@ -32,7 +32,7 @@ const Landing = () => {
         
         <motion.p className="landing_p">or</motion.p>
         <Button variant="outline-info" >
-        <Link to="/login" class>
+        <Link to="/signup" class>
           Sing UP<i className="fa-solid fa-arrow-right"></i>
         </Link>
         </Button>
