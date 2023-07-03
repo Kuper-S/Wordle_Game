@@ -18,7 +18,7 @@ const Home = () => {
       toast.error('Failed to log out');
     }
   };
-  
+  console.log(currentUser);
   const handleToGame = async () => {
     navigate('/game');
   };
@@ -28,7 +28,7 @@ const Home = () => {
       <ToastContainer />
       <Row className="justify-content-center">
         <Col xs={12}  className="text-center">
-        <h1>Welcome {currentUser.displayName} !</h1>
+        <h1>Welcome {currentUser.displayName} ! 🚀</h1>
         <h3>Ready to Play?</h3>
 
           {currentUser && (

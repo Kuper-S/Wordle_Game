@@ -84,6 +84,7 @@ nav h1 {
   font-family: Helvetica, Arial, sans-serif;
   color: rgb(255, 255, 255);
   font-size: 45px;
+  font-weight: bolder;
 }
 
 .game {
@@ -180,6 +181,10 @@ nav h1 {
   padding: 20px;
   
 }
+
+.game-buttons Button {
+  margin-right: 10px; /* Add margin-right between buttons */
+}
 .modal {
   position:relative;
   transform: translate(-50%, -50%);
@@ -236,6 +241,14 @@ nav h1 {
 
 .gameOver{
   color:#ce5454;
+}
+.table_container {
+  max-height: 600px; 
+  overflow: auto;
+  width: 100%;
+}
+.score-popup{
+  cursor: pointer;
 }
 #big {
   width: 100px;

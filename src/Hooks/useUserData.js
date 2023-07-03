@@ -37,6 +37,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { firestore } from '../services/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const useUserData = () => {
   const [userData, setUserData] = useState(null);

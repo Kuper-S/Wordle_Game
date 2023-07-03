@@ -50,7 +50,7 @@ function ResponsiveAppBar() {
     setError("USER IS NOT ALLOWD");
     try {
       await logOut();
-      navigate("/landing");
+      navigate("/");
     } catch {
       setError("Failed to log out");
     }

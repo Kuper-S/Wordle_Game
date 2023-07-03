@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Board from "./Board";
@@ -7,10 +8,13 @@ import Keyboard from "./Keyboard";
 import { boardDefault, generateWordSet } from "./Words";
 import { useAuth } from "../../context/AuthContext";
 import Modal from "../../components/Modals/Modal";
+import EndGameButton from "../../components/Buttons/EndGameButton";
+
 
 export const GameContext = React.createContext();
 
 function GamePage() {
+  const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
   const [board, setBoard] = useState(boardDefault); // Initialize board state with boardDefault
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letter: 0 });
@@ -27,7 +31,7 @@ function GamePage() {
   const [wordIndex, setWordIndex] = useState(0);
   const [numWordsGuessed, setNumWordsGuessed] = useState(0);
   const [showNextWordButton, setShowNextWordButton] = useState(false);
-  
+  const [showEndGameButton, setShowEndGameButton] = useState(false);
   
   console.log(correctWord);
 
@@ -52,8 +56,8 @@ function GamePage() {
     const enteredWord = board[currAttempt.attempt].join("");
   
     if (wordSet.has(enteredWord.toLowerCase())) {
-      
       setCurrAttempt({ attempt: currAttempt.attempt + 1, letter: 0 });
+      
     } else {
       toast.error("Word not found");
       return;
@@ -61,13 +65,15 @@ function GamePage() {
   
     if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
       setGameFinished(true);
+      setShowNextWordButton(true);
       setNumWordsGuessed((prevNumWords) => prevNumWords + 1);
       setGameOver({ gameOver: true, guessedWord: true });
       return; // Stop further execution of the function
     }
     setNumAttempts(prevAttempts => prevAttempts + 1); // Increment numAttempts by 1
-  
-    if (numAttempts === 6) { 
+    
+    
+    if (currAttempt.attempt === 5 ) { 
       setGameFinished(true);
       setGameOver({ gameOver: true, guessedWord: false });
       return; // Stop further execution of the function
@@ -96,7 +102,7 @@ function GamePage() {
     });
      
   };
-  console.log("USER NAME", currentUser);
+  
   console.log("onSelectLetter" , currAttempt);
 
   const handleRestartGame = async () => {
@@ -128,9 +134,22 @@ function GamePage() {
       setGameFinished(false);
       setNumAttempts(0);
       setShowNextWordButton(false); // Hide the "Next Word" button
-  };
+      if (wordList.length === wordIndex + 1) {
+        setShowNextWordButton(false);
+        setShowEndGameButton(true);
+      } else {
+        setShowNextWordButton(true);
+        setShowEndGameButton(false);
+      }
   
- 
+    };
+  
+    const handleEndGame = () => {
+      navigate('/home');
+    };
+    const handleScoreBoardButton = () => {
+      navigate('/scoreboard');
+    }
 
   return (
     <div className="gamepage">
@@ -139,7 +158,7 @@ function GamePage() {
         <nav>
           <h1>{currentUser.displayName} You can DO IT!</h1>
         </nav>
-
+        
         <ToastContainer />
 
         <GameContext.Provider
@@ -173,25 +192,35 @@ function GamePage() {
               <Keyboard />
             )}
             {gameFinished && (
-              <div className="game-buttons">
-                <Button variant="warning" onClick={handleNextWord}>
-                  End Game
-                </Button>
-                <Button variant="info" onClick={handleNextWord}>
-                  Next Word
-                </Button>
-                
-                
-              </div>
-            )}
+                <div className="game-buttons">
+                  {gameOver.gameOver && gameOver.guessedWord && (
+                    <Button variant="info" onClick={handleNextWord}>
+                      Next Word
+                    </Button>
+                  )}
+                  {showEndGameButton && (
+                    <EndGameButton handleEndGame={handleEndGame} />
+                  )}
+                </div>
+              )}
             <p className="attempts">Number of Words Guessed : {numWordsGuessed}</p>
+            <EndGameButton handleEndGame={handleEndGame} />
+            <div className="game-buttons">
+            <Button
+              variant="light"
+              onClick={handleScoreBoardButton}
+            >
+              Scoreboard
+            </Button>
             <Button
               variant="danger"
               onClick={handleRestartGame}
             >
               Restart Game
             </Button>
+            </div>
           </div>
+         
         </GameContext.Provider>
       </div>
     </div>
