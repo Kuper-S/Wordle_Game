@@ -30,6 +30,7 @@ function GamePage() {
   const [wordList, setWordList] = useState([]);
   const [wordIndex, setWordIndex] = useState(0);
   const [numWordsGuessed, setNumWordsGuessed] = useState(0);
+  const [wordsGuessed, SetWordsGuessed] = useState([]);
   const [showNextWordButton, setShowNextWordButton] = useState(false);
   const [showEndGameButton, setShowEndGameButton] = useState(false);
   
@@ -42,7 +43,8 @@ function GamePage() {
     setGameOver({ gameOver: false, guessedWord: false });
     setGameFinished(false);
     setNumAttempts(0);
-    setNumWordsGuessed(0);
+    setNumWordsGuessed(wordsGuessed.length); // Initialize the number of words guessed
+    console.log(wordsGuessed);
     generateWordSet().then((words) => {
       setWordList([...words.wordSet]); // Set the wordList state correctly
       setWordSet(words.wordSet);
@@ -57,7 +59,6 @@ function GamePage() {
   
     if (wordSet.has(enteredWord.toLowerCase())) {
       setCurrAttempt({ attempt: currAttempt.attempt + 1, letter: 0 });
-      
     } else {
       toast.error("Word not found");
       return;
@@ -66,20 +67,47 @@ function GamePage() {
     if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
       setGameFinished(true);
       setShowNextWordButton(true);
-      setNumWordsGuessed((prevNumWords) => prevNumWords + 1);
+      SetWordsGuessed(prevWords => [...prevWords, enteredWord]);
+      console.log(wordsGuessed.length);
+     
+      toast.success("Great JOB!");
       setGameOver({ gameOver: true, guessedWord: true });
       return; // Stop further execution of the function
     }
     setNumAttempts(prevAttempts => prevAttempts + 1); // Increment numAttempts by 1
-    
-    
-    if (currAttempt.attempt === 5 ) { 
+  
+    if (currAttempt.attempt === 5) {
       setGameFinished(true);
       setGameOver({ gameOver: true, guessedWord: false });
       return; // Stop further execution of the function
     }
   };
+  console.log(wordsGuessed);
+  const handleNextWord = async () => {
+    const words = await generateWordSet();
+    const guessedWord = board[currAttempt.attempt].join("");
+    const updatedWordsGuessed = [...wordsGuessed, guessedWord]; // Combine previous words with current guessed word
+    setWordSet(words.wordSet);
+    setCorrectWord(words.todaysWord); // Update correctWord after updating wordsGuessed
+    setWordIndex(prevIndex => prevIndex + 1);
+    setBoard(boardDefault);
+    setCurrAttempt({ attempt: 0, letter: 0 });
+    setDisabledLetters([]);
   
+    if (wordList.length === wordIndex + 1) {
+      setShowNextWordButton(false);
+      setShowEndGameButton(true);
+    } else {
+      setShowNextWordButton(true);
+      setShowEndGameButton(false);
+    }
+  
+    setNumAttempts(0);
+    setNumWordsGuessed(updatedWordsGuessed.length); // Update the number of words guessed
+    setGameOver({ gameOver: false, guessedWord: false });
+    setGameFinished(false);
+  };
+
 
   const onDelete = () => {
     if (currAttempt.letter === 0) return;
@@ -121,35 +149,25 @@ function GamePage() {
     setShowNextWordButton(false); // Hide the "Next Word" button
   };
   
-  const handleNextWord = async () => {
-      const words = await generateWordSet();
-      const newCorrectWord = words.todaysWord;
-      setWordSet(words.wordSet);
-      setCorrectWord(newCorrectWord);
-      setWordIndex(prevIndex => prevIndex + 1);
+
+  const handleEndGame = async () => {
+    
+    try{  
       setBoard(boardDefault);
       setCurrAttempt({ attempt: 0, letter: 0 });
       setDisabledLetters([]);
-      setGameOver({ gameOver: false, guessedWord: false });
-      setGameFinished(false);
-      setNumAttempts(0);
-      setShowNextWordButton(false); // Hide the "Next Word" button
-      if (wordList.length === wordIndex + 1) {
-        setShowNextWordButton(false);
-        setShowEndGameButton(true);
-      } else {
-        setShowNextWordButton(true);
-        setShowEndGameButton(false);
-      }
-  
-    };
-  
-    const handleEndGame = () => {
-      navigate('/home');
-    };
-    const handleScoreBoardButton = () => {
-      navigate('/scoreboard');
+      setGameOver({ gameOver: true, guessedWord: false });
+      setGameFinished(true);
+      navigate("/home");
+    } catch (error) {
+      console.error("Error updating user data:", error);
+      // Handle the error if necessary
     }
+  };
+
+  const handleScoreBoardButton = () => {
+    navigate('/scoreboard');
+  }
 
   return (
     <div className="gamepage">
@@ -194,7 +212,7 @@ function GamePage() {
             {gameFinished && (
                 <div className="game-buttons">
                   {gameOver.gameOver && gameOver.guessedWord && (
-                    <Button variant="info" onClick={handleNextWord}>
+                    <Button variant="light" onClick={handleNextWord}>
                       Next Word
                     </Button>
                   )}
@@ -203,7 +221,7 @@ function GamePage() {
                   )}
                 </div>
               )}
-            <p className="attempts">Number of Words Guessed : {numWordsGuessed}</p>
+            <p className="attempts">Number of Words Guessed : {wordsGuessed.length}</p>
             <EndGameButton handleEndGame={handleEndGame} />
             <div className="game-buttons">
             <Button

@@ -19,11 +19,13 @@ function AuthProvider({ children }) {
 
       const userRef = firestore.collection("users").doc(user.uid);
       const userData = {
-        name: username,
+        uid: user.uid,
+        username: username,
         email: email,
         wordsGuessed: [],
         score: 0,
         highestScore: 0,
+        overallScore: 0,
       };
       await user.updateProfile({ displayName: username });
       console.log("Before set");
@@ -32,57 +34,66 @@ function AuthProvider({ children }) {
       console.log(user);
       return { uid: user.uid, ...userData };
     } catch (error) {
+      // adding error about email address that is not valid or exsits, also userName.
       throw new Error("Failed to sign up: " + error.message);
     }
   };
   
-  
-  const updateUserData = async (newUsername, newScore, newAttempts, newGuessIt) => {
+  const updateUserData = async (
+    newUsername,
+    newScore,
+    newAttempts,
+    newGuessIt,
+    newWord,
+    newWordsGuessed
+  ) => {
     if (!currentUser) {
       throw new Error("No user is currently logged in");
     }
   
     try {
-      // Check if the user document exists
       const userRef = firestore.collection("users").doc(currentUser.uid);
       const doc = await userRef.get();
       if (doc.exists) {
         const userData = doc.data();
         const prevUser = { ...userData };
-        // Create an object to hold the updated user data
+  
         const updatedUserData = {
-          username: newUsername || "", // Use empty string as default value if newUsername is undefined
+          username: newUsername || "",
           score: newScore !== undefined ? newScore : 0,
-          attempts: newAttempts !== undefined ? newAttempts : 0, // Set 0 as default value if newAttempts is undefined
-          guessit: newGuessIt !== undefined ? newGuessIt : false, // Set false as default value if newGuessIt is undefined
+          attempts: newAttempts !== undefined ? newAttempts : 0,
+          guessit: newGuessIt !== undefined ? newGuessIt : false,
+          wordsGuessed: newWordsGuessed || [], // Add the newWordsGuessed array to the updated user data
         };
   
-        // Update the user data in the Firestore database
         await userRef.update(updatedUserData);
-        
-        // Update the currentUser state with the new values
-        setCurrentUser((prevUser) => ({
-          ...prevUser,
-          ...updatedUserData,
-        }));
   
-        // Check and update the highest score
         if (newScore > prevUser.highestScore) {
           await userRef.update({ highestScore: newScore });
         }
+  
+        const overallScore =
+          updatedUserData.wordsGuessed.length * 2 - updatedUserData.attempts;
+        await userRef.update({ overallScore });
+  
+        setCurrentUser((prevUser) => ({
+          ...prevUser,
+          ...updatedUserData,
+          overallScore,
+        }));
       } else {
-        // Create a new user document
         const userData = {
-          username: newUsername || "", // Use empty string as default value if newUsername is undefined
+          username: newUsername || "",
           score: newScore !== undefined ? newScore : 0,
-          attempts: newAttempts !== undefined ? newAttempts : 0, // Set 0 as default value if newAttempts is undefined
-          guessit: newGuessIt !== undefined ? newGuessIt : false, // Set false as default value if newGuessIt is undefined
-          highestScore: newScore !== undefined ? newScore : 0, // Set initial highest score as the new score
+          attempts: newAttempts !== undefined ? newAttempts : 0,
+          guessit: newGuessIt !== undefined ? newGuessIt : false,
+          highestScore: newScore !== undefined ? newScore : 0,
+          overallScore: 0,
+          wordsGuessed: newWordsGuessed || [], // Add the newWordsGuessed array to the user data
         };
   
         await userRef.set(userData);
   
-        // Update the currentUser state with the new values
         setCurrentUser((prevUser) => ({
           ...prevUser,
           ...userData,
@@ -93,9 +104,8 @@ function AuthProvider({ children }) {
       throw new Error("Failed to update user data: " + error.message);
     }
   };
-
-
-
+  
+  
   const logIn = (email, password) => {
     return auth.signInWithEmailAndPassword(email, password);
   };
@@ -160,49 +170,3 @@ function AuthProvider({ children }) {
 
 export default AuthProvider;
 
-
-// const updateUserData = async (newUsername, newAttempts, newGuessIt) => {
-  //   if (!currentUser) {
-  //     throw new Error("No user is currently logged in");
-  //   }
-  
-  //   try {
-  //     const userRef = firestore.collection("users").doc(currentUser.uid);
-  //     const doc = await userRef.get();
-  //     if (doc.exists) {
-  //       const userData = doc.data();
-  //       const updatedWordsGuessed = [...userData.wordsGuessed];
-  
-  //       // Add new word and attempts to wordsGuessed array
-  //       if (newAttempts !== undefined && newGuessIt !== undefined) {
-  //         const newWordGuessed = {
-  //           word: newUsername,
-  //           attempts: newAttempts,
-  //         };
-  //         updatedWordsGuessed.push(newWordGuessed);
-  //       }
-  
-  //       const numWordsGuessed = updatedWordsGuessed.length;
-  //       const totalAttempts = updatedWordsGuessed.reduce((total, word) => total + word.attempts, 0);
-  //       const score = numWordsGuessed + totalAttempts;
-  //       const highestScore = Math.max(score, userData.highestScore || 0); // Compare current score with existing highest score
-  
-  //       const updatedUserData = {
-  //         name: newUsername || userData.name,
-  //         wordsGuessed: updatedWordsGuessed,
-  //         score: score,
-  //         highestScore: highestScore,
-  //       };
-  
-  //       await userRef.update(updatedUserData);
-  
-  //       setCurrentUser((prevUser) => ({
-  //         ...prevUser,
-  //         ...updatedUserData,
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating user data:", error);
-  //     throw new Error("Failed to update user data: " + error.message);
-  //   }
-  // };

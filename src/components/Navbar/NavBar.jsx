@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -163,7 +163,7 @@ function ResponsiveAppBar() {
               {currentUser && (
                 <Tooltip title="Open settings">
                   <IconButton  onClick={handleOpenUserMenu} sx={{ p: 2 }}>
-                    <Avatar  alt={currentUser.displayName} src="/static/images/avatar/2.jpg" />
+                    <Avatar  alt={currentUser.displayName} src="/static/images/avatar/2.jpg" sx={{bgcolor: 'orange'}}/>
                     <Box></Box>
                   </IconButton>
                 </Tooltip>

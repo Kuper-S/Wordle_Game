@@ -7,16 +7,15 @@ import useScores from '../../Hooks/useScores';
 import '../../App.css';
 
 function ScoreBoard() {
-  const { currentUser } = useAuth();
+  
   const { loading, error, usersData: scoresData } = useScores();
   const navigate = useNavigate();
   const userData = useUserData();
   const [usersData, setUsersData] = useState([]);
 
-  const handleToHomePage = async () => {
-    navigate('/home');
-  };
-
+  
+  console.log('USERDATA' , usersData);
+  
   useEffect(() => {
     if (userData) {
       setUsersData([userData]);
@@ -24,22 +23,36 @@ function ScoreBoard() {
   }, [userData]);
 
   const popover = (
-    <Popover id="scoreExplanationPopover">
-      <Popover.Body>
-        The overall score is calculated based on the number of words guessed correctly and the number of attempts made. The score rewards players who guessed more words accurately with fewer attempts. The lower the score, the better the performance.
+    <Popover id="scoreExplanationPopover" >
+      <Popover.Body sx={{p:2}}>
+        The overall score is calculated based on the number of words guessed correctly and the number of attempts made. The score rewards players who guessed more words accurately with fewer attempts.
       </Popover.Body>
     </Popover>
   );
 
   const sortedUsersData = [...usersData, ...scoresData].sort((a, b) => {
     if (a.score === b.score) {
-      return a.guessit - b.guessit; // Sort by "guessit" property in descending order
+      return a.guessit - b.guessit;
     } else {
-      return b.score - a.score; // Sort by score in ascending order
+      return b.score - a.score;
     }
   });
+  
+  const filteredUsersData = sortedUsersData.filter(
+    (user, index, arr) =>
+      arr.findIndex(
+        (u) => u.username === user.username && u.wordsGuessed.length > 0
+      ) === index
+  );
 
-  const filteredUsersData = sortedUsersData.filter(user => user.username);
+  const handleNewGameButton = async () => {
+    navigate('/game');
+  }
+
+  const handleToHomePage = async () => {
+    navigate('/home');
+  };
+  
   return (
     <div className="scoreboard-container">
       <h1>Scoreboard 🏅</h1>
@@ -67,12 +80,15 @@ function ScoreBoard() {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{user.username}</td>
-                      <td>{user?.score}</td>
-                      <td>{user.guessit ? 'Yes' : 'No'}</td>
+                      <td>{user?.wordsGuessed.length}</td>
+                      <td>{user?.overallScore}</td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
+              <Button variant="light" onClick={handleNewGameButton}>
+              New Game 🕹️
+            </Button>
             </div>
             <Button variant="success" onClick={handleToHomePage}>
               Back Home🏠
