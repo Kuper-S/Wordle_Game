@@ -1,50 +1,31 @@
 import { useEffect, useState } from 'react';
 import { firestore } from '../services/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import useUserData from './useUserData';
 
-const useScores = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [usersData, setUsersData] = useState([]);
+export const calculateOverallScore = (user, totalAttempts) => {
+  const { wordsGuessed = [] } = user;
+  const guessedWordsCount = Array.isArray(wordsGuessed) ? wordsGuessed.length : 0;
+  const calculatedScore = (guessedWordsCount * 10) - totalAttempts;
 
-  const calculateOverallScore = (user) => {
-    const { wordsGuessed = [], attempts } = user;
-    const calculatedScore = wordsGuessed.length * 10 - attempts;
-    console.log("calculateOverallScore :", calculatedScore)
+  // Check if the necessary properties exist before returning the overall score
+  if (!isNaN(calculatedScore) && Number.isFinite(calculatedScore)) {
     return calculatedScore;
-  };
-  
-  useEffect(() => {
-    const fetchScores = async () => {
-      setLoading(true);
-      try {
-        const usersCollectionRef = collection(firestore, 'users');
-        const querySnapshot = await getDocs(usersCollectionRef);
+  }
 
-        const scores = [];
-        querySnapshot.forEach((doc) => {
-          const user = doc.data();
-          // Check if the user has a score property
-          if (!user.hasOwnProperty('score')) {
-            user.score = 0; // Initialize score to zero
-          }
-          // Calculate the overall score
-          scores.push({ ...user, calculateOverallScore });
-        });
-        console.log(scores);
-        setUsersData(scores);
-      } catch (error) {
-        console.error('Error retrieving user scores:', error);
-        setError('Failed to fetch scores');
-      }
-      setLoading(false);
-    };
-
-    fetchScores();
-  }, []);
-
-  return { loading, error, usersData };
+  return 0; // Return 0 if the overall score couldn't be calculated
 };
 
-export default useScores;
+export const fetchScoresForAllUsers = async () => {
+  try {
+    const usersCollectionRef = firestore.collection('users');
+    const querySnapshot = await usersCollectionRef.get();
+    const scores = querySnapshot.docs.map((doc) => {
+      const user = doc.data();
+      const overallScore = calculateOverallScore(user);
+      return { ...user, overallScore };
+    });
+    return scores;
+  } catch (error) {
+    console.error('Error retrieving user scores:', error);
+    throw new Error('Failed to fetch scores');
+  }
+};

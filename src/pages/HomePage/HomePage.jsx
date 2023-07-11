@@ -4,12 +4,13 @@ import { Button, Container, Row, Col } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useUserData from "../../Hooks/useUserData";
 import Landing from "../LandingPage/Landing"
+
+
 const Home = () => {
   const { currentUser, logOut } = useAuth();
   const navigate = useNavigate();
-  const userData = useUserData();
+  
   const handleLogout = async () => {
     try {
       await logOut();
@@ -18,11 +19,12 @@ const Home = () => {
       toast.error('Failed to log out');
     }
   };
-  console.log(currentUser);
+  console.log("HOMEPAGE ",currentUser);
+  
   const handleToGame = async () => {
     navigate('/game');
   };
-
+  
   return (
     <Container className="home-container ">
       <ToastContainer />
