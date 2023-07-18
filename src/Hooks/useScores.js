@@ -1,31 +1,22 @@
-import { useEffect, useState } from 'react';
-import { firestore } from '../services/firebase';
 
-export const calculateOverallScore = (user, totalAttempts) => {
-  const { wordsGuessed = [] } = user;
-  const guessedWordsCount = Array.isArray(wordsGuessed) ? wordsGuessed.length : 0;
-  const calculatedScore = (guessedWordsCount * 10) - totalAttempts;
+// export const calculateOverallScore = (user, totalAttempts, newWordsGuessedCount) => {
+//   const { wordsGuessed = [], overallScore = 0 } = user;
 
-  // Check if the necessary properties exist before returning the overall score
-  if (!isNaN(calculatedScore) && Number.isFinite(calculatedScore)) {
-    return calculatedScore;
-  }
+//   const guessedWordsCount = wordsGuessed.length + newWordsGuessedCount;
+//   console.log('guessedWordsCount', guessedWordsCount);
+//   console.log('newWordsGuessedCount', newWordsGuessedCount);
+//   console.log('wordsGuessed', wordsGuessed);
+//   console.log('overallScore', overallScore);
+//   console.log('totalAttempts', totalAttempts);
 
-  return 0; // Return 0 if the overall score couldn't be calculated
-};
+//   const latestGameScore = guessedWordsCount * 10 - totalAttempts;
 
-export const fetchScoresForAllUsers = async () => {
-  try {
-    const usersCollectionRef = firestore.collection('users');
-    const querySnapshot = await usersCollectionRef.get();
-    const scores = querySnapshot.docs.map((doc) => {
-      const user = doc.data();
-      const overallScore = calculateOverallScore(user);
-      return { ...user, overallScore };
-    });
-    return scores;
-  } catch (error) {
-    console.error('Error retrieving user scores:', error);
-    throw new Error('Failed to fetch scores');
-  }
+//   // Return the maximum score between the latest game score and the current overall score
+//   return Math.max(latestGameScore, overallScore);
+// };
+
+export const calculateOverallScore = (numWordsGuessed, totalAttempts) => {
+  // Customize the scoring formula based on your requirements
+  const overallScore =( numWordsGuessed * 10) - totalAttempts;
+  return overallScore;
 };

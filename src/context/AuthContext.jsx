@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth, firestore } from "../services/firebase";
 import { GoogleAuthProvider } from "firebase/auth";
 import { GithubAuthProvider } from "firebase/auth";
-import {calculateOverallScore} from "../Hooks/useScores";
+import { Error } from "@mui/icons-material";
 
 export const AuthContext = createContext();
 
@@ -23,8 +23,8 @@ function AuthProvider({ children }) {
       const userData = {
         uid: user.uid,
         username: username,
+        totalAttempts: 0,
         wordsGuessed: [],
-        overallScore: 0,
       };
       await user.updateProfile({ displayName: username });
       
@@ -37,7 +37,7 @@ function AuthProvider({ children }) {
       throw new Error("Failed to sign up: " + error.message);
     }
   };
-
+  
   const updateUserData = async (newWordsGuessed, newAttempts) => {
     if (!currentUser) {
       throw new Error("No user is currently logged in");
@@ -46,23 +46,16 @@ function AuthProvider({ children }) {
     try {
       const userRef = firestore.collection("users").doc(currentUser.uid);
       const doc = await userRef.get();
+  
       if (doc.exists) {
         const userData = doc.data();
+        const currentTotalAttempts = userData?.totalAttempts || 0;
   
-        const currentOverallScore = userData?.overallScore || 0;
-        const latestGameScore = calculateOverallScore(userData, newAttempts);
-  
-        if (latestGameScore > currentOverallScore) {
-          const updatedUserData = {
-            ...userData,
+        if (newAttempts > currentTotalAttempts || newWordsGuessed.length > userData.wordsGuessed.length) {
+          await userRef.update({
             wordsGuessed: newWordsGuessed || userData.wordsGuessed || [],
-            overallScore: latestGameScore,
-          };
-  
-          await userRef.update(updatedUserData);
-          setCurrentUser(updatedUserData);
-        } else {
-          setCurrentUser(userData);
+            totalAttempts: newAttempts,
+          });
         }
       } else {
         throw new Error("User document does not exist");
@@ -73,6 +66,43 @@ function AuthProvider({ children }) {
     }
   };
   
+  // const updateUserData = async (newWordsGuessed, newAttempts, overallScore) => {
+  //   if (!currentUser) {
+  //     throw new Error("No user is currently logged in");
+  //   }
+  
+  //   try {
+  //     const userRef = firestore.collection("users").doc(currentUser.uid);
+  //     const doc = await userRef.get();
+  
+  //     if (doc.exists) {
+  //       const userData = doc.data();
+  //       const currentOverallScore = userData?.overallScore || 0;
+  
+  //       if (overallScore > currentOverallScore || newWordsGuessed.length > userData.wordsGuessed.length) {
+  //         await userRef.update({
+  //           wordsGuessed: newWordsGuessed || userData.wordsGuessed || [],
+  //           overallScore: overallScore,
+  //         });
+  
+  //         setCurrentUser((prevUser) => ({
+  //           ...prevUser,
+  //           wordsGuessed: newWordsGuessed || userData.wordsGuessed || [],
+  //           overallScore: overallScore,
+  //         }));
+  //       }
+  //     } else {
+  //       console.log('Set Current User Error');
+  //       throw new Error("User document does not exist");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating user data:", error);
+  //     throw new Error("Failed to update user data: " + error.message);
+  //   }
+  // };
+  
+  
+
   const logIn = (email, password) => {
     return auth.signInWithEmailAndPassword(email, password);
   };
@@ -85,9 +115,29 @@ function AuthProvider({ children }) {
     return auth.sendPasswordResetEmail(email);
   };
 
-  const signInWithGoogle = () => {
+  const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    return auth.signInWithPopup(provider);
+    try {
+      const result = await auth.signInWithPopup(provider);
+      
+      const { user } = result;
+      const userRef = firestore.collection("users").doc(user.uid);
+      
+      const doc = await userRef.get();
+      if (!doc.exists) {
+        const userData = {
+          uid: user.uid,
+          username: user.displayName,
+          wordsGuessed: [],
+          overallScore: 0,
+        };
+        await userRef.set(userData);
+      }
+      
+      return result;
+    } catch (error) {
+      console.log("Failed to sign in with Google: " + error.message);
+    }
   };
 
   const signInWithGithub = () => {
@@ -109,17 +159,57 @@ function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-      setLoading(false);
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        // User is logged in, set the current user
+        setCurrentUser(user);
+        setLoading(false);
+      } else {
+        // User is not logged in, check if there is a token in local storage
+        const token = localStorage.getItem("token");
+
+        if (token) {
+          // Token exists, try to sign in with the token
+          try {
+            await auth.signInWithCustomToken(token);
+            setCurrentUser(auth.currentUser);
+            setLoading(false);
+          } catch (error) {
+            console.error("Failed to sign in with token:", error);
+            setCurrentUser(null);
+            setLoading(false);
+          }
+        } else {
+          // No token, user is not logged in
+          setCurrentUser(null);
+          setLoading(false);
+        }
+      }
     });
 
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    // Save the user token in local storage when the user is logged in
+    if (currentUser) {
+      auth.currentUser
+        .getIdToken(/* forceRefresh */ true)
+        .then((token) => {
+          localStorage.setItem("token", token);
+        })
+        .catch((error) => {
+          console.error("Failed to get user token:", error);
+        });
+    } else {
+      // Remove the token from local storage when the user logs out
+      localStorage.removeItem("token");
+    }
+  }, [currentUser]);
+
   const value = {
     currentUser,
-    ...(setCurrentUser && { setCurrentUser }),
+    setCurrentUser,
     signup,
     logOut,
     logIn,
@@ -130,13 +220,14 @@ function AuthProvider({ children }) {
     updatePassword,
     updateUserData,
   };
-  
+  function LoadingSpinner() {
+    return <div>Loading...</div>;
+  }
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {loading ? <LoadingSpinner /> : children}
     </AuthContext.Provider>
   );
 }
-
 export default AuthProvider;
 

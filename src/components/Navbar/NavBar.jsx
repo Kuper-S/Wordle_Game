@@ -17,6 +17,7 @@ import useUserData from '../../Hooks/useUserData';
 const pages = [
   { title: 'Profile', link: '/profile' },
   { title: 'Scoreboard', link: '/scoreboard' },
+  { title: 'Rules', link:'/gamerules'},
 ];
 
 

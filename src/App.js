@@ -11,7 +11,7 @@ import ScoreBoard from './pages/ScoreBoard/ScoreBoard';
 import GamePage from './pages/GamePage/GamePage';
 import Footer from './pages/Footer/Footer';
 import Landing from "./pages/LandingPage/Landing";
-
+import GameRules from './pages/GameRules/GameRules';
 
 function App() {
   const { currentUser } = useAuth();
@@ -29,7 +29,8 @@ function App() {
               <Route path="/login" element={<LogIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/forgetpassword" element={<ForgetPassword />} />
-              <Route path="/scoreboard" element={<ScoreBoard />} />   
+              <Route path="/scoreboard" element={<ScoreBoard />} /> 
+              <Route path="/gamerules" element={<GameRules />} /> 
               {currentUser && <Route path="/game" element={<GamePage />} />}
               {currentUser && <Route path="/profile" element={<Profile />} />}
               {!currentUser && (
