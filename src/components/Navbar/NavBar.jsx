@@ -13,7 +13,6 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate  } from 'react-router-dom';
-import useUserData from '../../Hooks/useUserData';
 const pages = [
   { title: 'Profile', link: '/profile' },
   { title: 'Scoreboard', link: '/scoreboard' },
@@ -27,7 +26,7 @@ function ResponsiveAppBar() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { currentUser,logOut } = useAuth();
-  const userData = useUserData();
+  
   const navigate = useNavigate();
   
 
@@ -165,7 +164,7 @@ function ResponsiveAppBar() {
                 <Tooltip title="Open settings">
                   <IconButton  onClick={handleOpenUserMenu} sx={{ p: 2 }}>
                     <Avatar  alt={currentUser.displayName} src="/static/images/avatar/2.jpg" sx={{bgcolor: 'orange'}}/>
-                    <Box></Box>
+                    
                   </IconButton>
                 </Tooltip>
               )}
@@ -187,7 +186,7 @@ function ResponsiveAppBar() {
             >
             
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" onClick ={handleLogout}>Logout</Typography>
+              <Typography textAlign="center" sx={{ color: "black" }} onClick ={handleLogout}>Logout</Typography>
             </MenuItem>
           </Menu>
             </Box>

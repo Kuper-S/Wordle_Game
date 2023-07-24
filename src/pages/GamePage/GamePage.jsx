@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
 import Board from "./Board";
 import Confetti from 'react-confetti';
 import GameOver from "./GameOver";
@@ -173,7 +172,7 @@ function GamePage() {
     const words = await generateWordSet();
     const guessedWord = board[currAttempt.attempt].join("");
     const updatedWordsGuessed = [...wordsGuessed, guessedWord].filter(Boolean);
-    console.log("Board" ,board);
+    
     console.log("currAttempt.attempt" ,currAttempt.attempt)
     setShowConfetti(false);
     setGameState((prevState) => ({
@@ -362,33 +361,3 @@ function GamePage() {
 
 export default GamePage;
 
-
-
-
-  // const updateUserScore = async (wordsGuessed, totalAttempts) => {
-  //   try {
-  //     await updateUserData(wordsGuessed, totalAttempts);
-  //   } catch (error) {
-  //     console.error("Error updating user data:", error);
-  //     // Handle error state or show an error message to the user
-  //   }
-  // };
-  
-  // const handleScoreBoardButton = async () => {
-  //   if (userData) {
-  //     try {
-  //       setShowConfetti(false);
-  //       setGameStateProperty("showEndGameButton", true);
-  //       setLoadingScoreboard(true);
-  //       await updateUserScore(wordsGuessed, totalAttempts);
-        
-  //       setLoadingScoreboard(false);
-  //       navigate("/scoreboard", { userData });
-  //     } catch (error) {
-  //       console.error("Error updating user data:", error);
-  //       // Handle error state or show an error message to the user
-  //     }
-  //   } else {
-  //     console.log('ERROR updating user data from game page');
-  //   }
-  // };

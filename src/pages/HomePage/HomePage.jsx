@@ -1,16 +1,16 @@
 import React from 'react';
+import TopPlayers from "../../components/TopPlayers/TopPlayers";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Landing from "../LandingPage/Landing"
-
+import Landing from "../LandingPage/Landing";
 
 const Home = () => {
   const { currentUser, logOut } = useAuth();
   const navigate = useNavigate();
-  
+
   const handleLogout = async () => {
     try {
       await logOut();
@@ -19,40 +19,37 @@ const Home = () => {
       toast.error('Failed to log out');
     }
   };
-  console.log("HOMEPAGE ",currentUser);
-  
+
   const handleToGame = async () => {
     navigate('/game');
   };
-  
+
   return (
-    <Container className="home-container ">
+    <Container className="home-container">
+      <TopPlayers />
       <ToastContainer />
       <Row className="justify-content-center">
-        <Col xs={12}  className="text-center">
-        <h1>Welcome {currentUser.displayName} ! 🚀</h1>
-        <h3>Ready to Play?</h3>
+        <Col xs={12} className="text-center">
+          <h1>Welcome {currentUser.displayName}! 🚀</h1>
+          <h3>Ready to Play?</h3>
 
           {currentUser && (
             <div>
-              
               <Button variant="info" onClick={handleToGame} className="m-5 p-lg-3">
                 NEW GAME
               </Button>
-              <Link to="/profile" >
+              <Link to="/profile">
                 <Button variant="primary" className="m-5 p-lg-3">Go to Profile</Button>
               </Link>
-              
-                <div>
+              <div>
                 <Button variant="danger" onClick={handleLogout} className="mt-10">
-                Log Out
-              </Button>
-                </div>
+                  Log Out
+                </Button>
+              </div>
             </div>
-            
           )}
           {!currentUser && (
-            <Landing/>
+            <Landing />
           )}
         </Col>
       </Row>

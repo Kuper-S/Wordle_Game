@@ -2,17 +2,11 @@ import React, { useContext } from "react";
 import { GameContext } from "./GamePage";
 
 function GameOver() {
-  const {
-    currAttempt,
-    gameOver,
-    correctWord,
-    
-  } = useContext(GameContext);
+  const { currAttempt, gameOver, correctWord } = useContext(GameContext);
 
- 
   return (
-    <div className="gameOver">
-      <h3 >
+    <div className={`gameOver ${gameOver.guessedWord ? "correct" : "failed"}`}>
+      <h3>
         {gameOver.guessedWord
           ? "You Correctly Guessed the Wordle"
           : "You Failed to Guess the Word"}

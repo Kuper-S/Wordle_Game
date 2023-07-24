@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import Loading from "../UserAuthPages/Loading";
 import { auth, firestore } from "../../services/firebase";
 
@@ -82,7 +82,7 @@ function Profile() {
         src="image/UserAvatar.png"
         alt="user"
       />
-      <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "50%" }}>
+      <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "80%" }}>
         {error && <Alert variant="danger">{error}</Alert>}
         {message && <Alert variant="success">{message}</Alert>}
         {loading && <Loading />}
@@ -112,18 +112,11 @@ function Profile() {
           />
         </Form.Group>
         
-        <div className="d-flex gap-2 justify-content-center align-items-center">
-          <Button type="submit" className="w-100 mt-2" variant="primary">
-            Update Profile
+        <div className="d-xl-grid gap-2 justify-content-center">
+          <Button type="submit" variant="primary" >
+          Update Profile
           </Button>
-          <Button
-            className="w-100 mt-2"
-            variant="danger"
-            onClick={handleLogout}
-          >
-            Log Out
-          </Button>
-          <Button variant="success" onClick={handleToHomePage}>
+          <Button variant="success" onClick={handleToHomePage} >
             HOME
           </Button>
         </div>

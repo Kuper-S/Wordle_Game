@@ -86,6 +86,59 @@ nav h1 {
   font-size: 45px;
   font-weight: bolder;
 }
+.game-rules-container {
+  text-align: center;
+}
+
+.game-rules-title {
+  color: #6e418b;
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.game-rules-ol {
+  text-align: left;
+  margin-left: 50px;
+  color: rgb(219, 219, 219);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.game-rules-text {
+  color: rgb(250, 250, 250);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.example-scores-table {
+  width: 300px;
+  
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+.example-scores-table th,
+.example-scores-table td {
+  border: 1px solid #ccc;
+  background-color: #6e418b;
+  color:#f2f2f2;
+  padding: 8px;
+  text-align: center;
+}
+
+.example-scores-table th {
+  background-color: #8836be;
+  font-weight: bold;
+}
+.robot-container {
+  position: relative;
+  margin-top: 280px;
+  margin-bottom: 50px;
+}
+
+
+
 
 .game {
   width: 100vw;
@@ -124,6 +177,12 @@ nav h1 {
   color: white;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.letter.pressed {
+  /* Add styles for the pressed state here */
+  background-color: gray;
+}
+
 .keyboard {
   width: 700px;
   
@@ -185,6 +244,18 @@ nav h1 {
 .game-buttons Button {
   margin-right: 10px; /* Add margin-right between buttons */
 }
+
+.gameOver{
+  color:#b098db;
+}
+.correct {
+  color: green;
+}
+
+.failed {
+  color: red;
+}
+
 .modal {
   position:relative;
   transform: translate(-50%, -50%);
@@ -239,9 +310,7 @@ nav h1 {
   margin-left: 20%;
 }
 
-.gameOver{
-  color:#b098db;
-}
+
 .table_container {
   max-height: 600px; 
   overflow: auto;
@@ -250,6 +319,39 @@ nav h1 {
 .score-popup{
   cursor: pointer;
 }
+
+
+.top-players-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%; 
+  height: 100px; 
+}
+
+.top-players-list {
+  list-style:disc;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  animation: marquee 15s linear infinite; 
+}
+
+.top-players-list li {
+  margin-right: 20px;
+  white-space: nowrap;
+}
+
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
 #big {
   width: 100px;
 }
