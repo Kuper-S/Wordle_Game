@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
+import { Modal } from 'react-bootstrap';
 import Board from "./Board";
 import Confetti from 'react-confetti';
 import GameOver from "./GameOver";
@@ -9,7 +10,7 @@ import Keyboard from "./Keyboard";
 import { boardDefault, generateWordSet } from "./Words";
 import { useAuth } from "../../context/AuthContext";
 import useUserData from "../../Hooks/useUserData";
-import Modal from "../../components/Modals/Modal";
+import Example from "../../components/Modals/PopUpModal";
 
 export const GameContext = React.createContext();
 
@@ -39,6 +40,7 @@ function GamePage() {
     setDisabledLetters: () => {},
   });
   const [loadingScoreboard, setLoadingScoreboard] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const {
     board,
@@ -201,7 +203,7 @@ function GamePage() {
         setShowConfetti(false);
         setGameStateProperty("showEndGameButton", true);
         setLoadingScoreboard(true);
-        setLoadingScoreboard(false);
+        
         navigate("/scoreboard", { state: { userData } });
         // Remove the navigate line from here
       } catch (error) {
@@ -269,6 +271,37 @@ function GamePage() {
     });
   };
 
+  const handleEndGameButton = () => {
+    setShowConfetti(false);
+    setShowModal(true);
+  };
+  
+  const handleConfirmEndGame = () => {
+    // Reset the game state and close the modal
+    setGameState((prevState) => ({
+      ...prevState,
+      wordIndex: 0,
+      wordsGuessed: [],
+      totalAttempts: 0,
+      numWordsGuessed: 0,
+      board: boardDefault,
+      currAttempt: { attempt: 0, letter: 0 },
+      disabledLetters: [],
+      gameOver: { gameOver: true, guessedWord: false },
+      gameFinished: true,
+      numAttempts: 0,
+      showNextWordButton: false,
+    }));
+    setShowModal(false);
+  
+    navigate('/home');
+  };
+  
+  const handleCancelEndGame = () => {
+    setShowModal(false);
+  };
+
+
   const confettiConfig = {
     angle: 90,
     spread: 360,
@@ -286,10 +319,11 @@ function GamePage() {
   return (
     <div className="gamepage">
       <div className="game-container">
-        <Modal />
+       
         <nav>
           <h1>{currentUser.displayName}, You can do it!</h1>
         </nav>
+        <Example/>
 
         <ToastContainer />
 
@@ -345,6 +379,26 @@ function GamePage() {
             <p className="attempts">Number of Words Guessed: {numWordsGuessed}</p>
 
             <div className="game-buttons">
+              <Button
+                variant="warning"
+                onClick={handleEndGameButton}
+              >
+                End Game
+              </Button>
+              <Modal show={showModal} onHide={handleCancelEndGame} backdrop="static" centered>
+              <Modal.Header closeButton>
+                <Modal.Title>Confirm End Game</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>Are you sure you want to end the game?</Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCancelEndGame}>
+                   Cancel
+                  </Button>
+                  <Button variant="danger" onClick={handleConfirmEndGame}>
+                    End Game
+                  </Button>
+                </Modal.Footer>
+              </Modal>
               <Button
                 variant="danger"
                 onClick={handleRestartGame}

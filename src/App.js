@@ -11,7 +11,7 @@ import ScoreBoard from './pages/ScoreBoard/ScoreBoard';
 import GamePage from './pages/GamePage/GamePage';
 import Footer from './pages/Footer/Footer';
 import Landing from "./pages/LandingPage/Landing";
-import GameRules from './pages/GameRules/Robot';
+import GameRules from './pages/GameRules/GameRules';
 
 function App() {
   const { currentUser } = useAuth();

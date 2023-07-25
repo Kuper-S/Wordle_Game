@@ -24,10 +24,11 @@ function GameRules() {
         <li>After six attempts, the round ends, and the correct word will be revealed.</li>
       </ol>
 
-      <h2 className="game-rules-title">Score Explanation</h2>
+      <h2 className="game-rules-title">Score Logic Explanation</h2>
       <p className="game-rules-text">
         The scoring is based on the number of attempts it takes to correctly guess the word.
         In case of a tie (two or more players guessing the same number of words),
+        
         the player with the lowest total attempts across all words guessed will be ranked higher.
         The lower the total attempts, the better your score.
       </p>

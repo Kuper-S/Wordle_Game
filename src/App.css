@@ -4,15 +4,15 @@
   background-color: #121212;
   width: 100vw;
   height: 100vh;
-  padding-left: 0; /* Reset padding */
-  padding-right: 0; /* Reset padding */
+  padding-left: 0; 
+  padding-right: 0;
   color: rgb(0, 0, 0);
 }
 .gamepage {
   text-align: center;
   background-color: #121212;
   width: 100vw;
-  height: calc(100vh - 200px); /* Adjust the value based on the height of navbar and footer */
+  height: calc(100vh - 200px); 
   padding: 0;
   color: rgb(0, 0, 0);
   display: flex;
@@ -40,7 +40,9 @@
   padding: 150px;
   color :azure;
 }
-
+.home-logout{
+  margin-top: 350px;
+}
 .footer {
   position: fixed;
   bottom: 0;
@@ -75,8 +77,8 @@ nav {
   border-bottom: 1px solid grey;
   display: grid;
   place-items: center;
-  padding-left: 0; /* Reset padding */
-  padding-right: 0; /* Reset padding */
+  padding-left: 0; 
+  padding-right: 0; 
 }
 
 nav h1 {
@@ -139,10 +141,9 @@ nav h1 {
 
 
 
-
 .game {
   width: 100vw;
-  height: calc(100vh - 450px); /* Adjust the value as needed */
+  height: calc(100vh - 450px);
   display: flex;
   align-items: center;
   padding-top: 20px;
@@ -179,7 +180,7 @@ nav h1 {
 }
 
 .letter.pressed {
-  /* Add styles for the pressed state here */
+ 
   background-color: gray;
 }
 
@@ -242,7 +243,7 @@ nav h1 {
 }
 
 .game-buttons Button {
-  margin-right: 10px; /* Add margin-right between buttons */
+  margin-right: 10px; 
 }
 
 .gameOver{
@@ -257,30 +258,50 @@ nav h1 {
 }
 
 .modal {
-  position:relative;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px;
-  width: 20px;
-  max-width: 20%;
-  border-radius: 8px;
+  font-size: 12px;
 }
-
-.modal-overlay {
-  position: relative;
-  top: 1;
-  left: 2;
+.modal > .header {
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
 }
-
-.modal-content {
+.modal > .content {
+  width: 100%;
+  padding: 10px 5px;
+}
+.modal > .actions {
+  width: 100%;
+  padding: 10px 5px;
+  margin: auto;
   text-align: center;
 }
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+}
+
+/* Style the loading container */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: black; 
+}
+
+
+
 
 .profile-container {
     width: 50%;
@@ -367,7 +388,7 @@ nav h1 {
     padding: 20px;
   }
 
-  /* Add more responsive styles as needed */
+ 
 }
 
 @media screen and (max-width: 480px) {
@@ -376,5 +397,76 @@ nav h1 {
     /* Modify the game container styles for smaller screens */
     padding: 40px;
   }
-  /* Modify styles for smaller screens */
+ 
+}
+
+/* test! */
+
+.glow-on-hover {
+  width: 300px;
+  height: 70px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background-color: rgb(105, 0, 204);
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+}
+
+.glow-on-hover:before {
+  content: '';
+  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  position: absolute;
+  top: -2px;
+  left:-2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 1;
+  transition: opacity .3s ease-in-out;
+  border-radius: 10px;
+}
+
+.glow-on-hover:active {
+  color: #000
+}
+
+.glow-on-hover:active:after {
+  background: transparent;
+  transition: transform 0.2s ease-in-out;
+  transform: scale(1.1);
+}
+
+.glow-on-hover:hover:before {
+  opacity: 1;
+ 
+  transform: scale(1);
+}
+.glow-on-hover.clicked {
+  /* Style for the button when it's clicked */
+  transform: scale(1.2); /* Increase the size by 20% when clicked */
+}
+.glow-on-hover:after {
+  z-index: -1;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  left: 0;
+  top: 0;
+  font-weight: bolder;
+  border-radius: 10px;
+}
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
 }

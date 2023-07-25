@@ -71,9 +71,7 @@ function ScoreBoard() {
   if (loading) {
     return (
       <div className="scoreboard-container">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Spinner animation="border"  variant="warning" role="status"/>
       </div>
     );
   }

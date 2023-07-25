@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Landing from "../LandingPage/Landing";
+import HomeGameBtn from "../../components/Buttons/HomeGameBtn";
 
 const Home = () => {
   const { currentUser, logOut } = useAuth();
@@ -21,28 +22,33 @@ const Home = () => {
   };
 
   const handleToGame = async () => {
-    navigate('/game');
+    setTimeout (() => {
+      navigate('/game');
+    }, 3000);
+    
   };
 
   return (
     <Container className="home-container">
       <TopPlayers />
       <ToastContainer />
+      
       <Row className="justify-content-center">
         <Col xs={12} className="text-center">
           <h1>Welcome {currentUser.displayName}! 🚀</h1>
           <h3>Ready to Play?</h3>
 
           {currentUser && (
+            
             <div>
-              <Button variant="info" onClick={handleToGame} className="m-5 p-lg-3">
-                NEW GAME
-              </Button>
-              <Link to="/profile">
-                <Button variant="primary" className="m-5 p-lg-3">Go to Profile</Button>
-              </Link>
-              <div>
-                <Button variant="danger" onClick={handleLogout} className="mt-10">
+              <Row className="mt-4 justify-content-center">
+                <Col xs={12} md={6} className="text-center">
+                  <HomeGameBtn onClick={handleToGame}/>
+                </Col>
+              </Row>
+
+              <div className="home-logout">
+                <Button variant="danger" onClick={handleLogout}>
                   Log Out
                 </Button>
               </div>

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth, firestore } from "../services/firebase";
 import { GoogleAuthProvider } from "firebase/auth";
 import { GithubAuthProvider } from "firebase/auth";
+import Spinner from 'react-bootstrap/Spinner';
 import { Error } from "@mui/icons-material";
 
 export const AuthContext = createContext();
@@ -221,7 +222,9 @@ function AuthProvider({ children }) {
     updateUserData,
   };
   function LoadingSpinner() {
-    return <div>Loading...</div>;
+    return <div className="loading-container" aria-live="assertive" role="status">
+              <Spinner animation="grow" variant="warning" size="lg"  />
+          </div>;
   }
   return (
     <AuthContext.Provider value={value}>
