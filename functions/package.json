@@ -5,7 +5,7 @@
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "firebase deploy --only functions,storage",
     "logs": "firebase functions:log"
   },
   "engines": {
@@ -19,5 +19,12 @@
   "devDependencies": {
     "firebase-functions-test": "^3.1.0"
   },
-  "private": true
+  "private": true,
+  "storage": [
+    {
+      "origin": ["http://localhost:3000"],
+      "method": ["GET"],
+      "maxAgeSeconds": 3600
+    }
+  ]
 }

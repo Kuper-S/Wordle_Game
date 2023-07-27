@@ -247,8 +247,13 @@ nav h1 {
 }
 
 .gameOver{
-  color:#b098db;
+  padding: 10px;
 }
+.gameover-alert{
+  color:#121212;
+  font-weight: 500;
+}
+
 .correct {
   color: green;
 }
@@ -400,7 +405,6 @@ nav h1 {
  
 }
 
-/* test! */
 
 .glow-on-hover {
   width: 300px;

@@ -1,19 +1,25 @@
 import React, { useContext } from "react";
 import { GameContext } from "./GamePage";
+import Alert from 'react-bootstrap/Alert';
 
 function GameOver() {
   const { currAttempt, gameOver, correctWord } = useContext(GameContext);
 
   return (
-    <div className={`gameOver ${gameOver.guessedWord ? "correct" : "failed"}`}>
-      <h3>
-        {gameOver.guessedWord
-          ? "You Correctly Guessed the Wordle"
-          : "You Failed to Guess the Word"}
-      </h3>
-      <h1>Correct Word: {correctWord.toUpperCase()}</h1>
-      {gameOver.guessedWord && (
-        <h3>You guessed in {currAttempt.attempt} attempts</h3>
+    <div className="gameOver">
+      {gameOver.guessedWord ? (
+        <Alert variant="success">
+          <Alert.Heading>You Correctly Guessed the Wordle</Alert.Heading>
+          <p className="gameover-alert">You guessed in {currAttempt.attempt} attempts</p>
+          
+          <p className="gameover-alert">Correct Word: {correctWord.toUpperCase()}</p>
+        </Alert>
+      ) : (
+        <Alert variant="danger">
+          <Alert.Heading>You Failed to Guess the Word</Alert.Heading>
+         
+          <p className="gameover-alert">Correct Word: {correctWord.toUpperCase()}</p>
+        </Alert>
       )}
     </div>
   );

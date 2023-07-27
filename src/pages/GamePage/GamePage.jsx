@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
-import { Modal } from 'react-bootstrap';
 import Board from "./Board";
 import Confetti from 'react-confetti';
 import GameOver from "./GameOver";
@@ -323,7 +322,7 @@ function GamePage() {
         <nav>
           <h1>{currentUser.displayName}, You can do it!</h1>
         </nav>
-        <Example/>
+        
 
         <ToastContainer />
 
@@ -370,7 +369,7 @@ function GamePage() {
                   </Button>
                 )}
                 {gameOver.gameOver && !gameOver.guessedWord && (
-                  <Button variant="warning" onClick={handleScoreBoardButton}>
+                  <Button variant="info" onClick={handleScoreBoardButton}>
                     Scoreboard
                   </Button>
                 )}
@@ -379,26 +378,18 @@ function GamePage() {
             <p className="attempts">Number of Words Guessed: {numWordsGuessed}</p>
 
             <div className="game-buttons">
+              <Example
+                show={showModal}
+                onConfirm={handleConfirmEndGame}
+                onCancel={handleCancelEndGame}
+              />
               <Button
                 variant="warning"
                 onClick={handleEndGameButton}
               >
                 End Game
               </Button>
-              <Modal show={showModal} onHide={handleCancelEndGame} backdrop="static" centered>
-              <Modal.Header closeButton>
-                <Modal.Title>Confirm End Game</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>Are you sure you want to end the game?</Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleCancelEndGame}>
-                   Cancel
-                  </Button>
-                  <Button variant="danger" onClick={handleConfirmEndGame}>
-                    End Game
-                  </Button>
-                </Modal.Footer>
-              </Modal>
+           
               <Button
                 variant="danger"
                 onClick={handleRestartGame}

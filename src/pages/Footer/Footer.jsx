@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Grid, IconButton, Typography } from '@mui/material';
-import { Facebook, Twitter, Google, Instagram, LinkedIn, GitHub } from '@mui/icons-material';
+import { LinkedIn, GitHub } from '@mui/icons-material';
 
 export default function Footer() {
   return (

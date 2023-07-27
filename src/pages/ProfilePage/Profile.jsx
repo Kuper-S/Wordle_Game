@@ -13,22 +13,11 @@ function Profile() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const { register, handleSubmit } = useForm();
-  const { currentUser, logOut, updateEmail, updatePassword } = useAuth();
+  const { currentUser, updateEmail, updatePassword } = useAuth();
   console.log(currentUser.displayName);
   
   console.log('HERE PROFILE');
-  const handleLogout = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      await logOut();
-      navigate("/login");
-    } catch {
-      setError("Failed to log out");
-    }
-
-    setLoading(false);
-  };
+  
   
 
   const onSubmit = async (data) => {

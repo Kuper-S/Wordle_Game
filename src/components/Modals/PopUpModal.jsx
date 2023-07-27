@@ -1,30 +1,25 @@
-import { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function Example() {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+function Example({ show, setShowModal, onConfirm, onCancel }) {
+  const handleClose = () => setShowModal(false);
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button>
+      
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>END GAME?</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you SURE ?</Modal.Body>
+        <Modal.Body>Are You SURE?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="info" onClick={onCancel}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            END GAME
+          <Button variant="danger" onClick={onConfirm}>
+            End Game
           </Button>
         </Modal.Footer>
       </Modal>

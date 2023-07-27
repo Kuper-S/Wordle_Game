@@ -1,6 +1,5 @@
-import React from 'react';
-import TopPlayers from "../../components/TopPlayers/TopPlayers";
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";import TopPlayers from "../../components/TopPlayers/TopPlayers";
+import { useNavigate } from 'react-router-dom';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,6 +11,8 @@ const Home = () => {
   const { currentUser, logOut } = useAuth();
   const navigate = useNavigate();
 
+  
+
   const handleLogout = async () => {
     try {
       await logOut();
@@ -20,14 +21,13 @@ const Home = () => {
       toast.error('Failed to log out');
     }
   };
-
   const handleToGame = async () => {
     setTimeout (() => {
       navigate('/game');
     }, 3000);
     
   };
-
+  
   return (
     <Container className="home-container">
       <TopPlayers />

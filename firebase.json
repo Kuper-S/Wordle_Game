@@ -22,5 +22,12 @@
       "**/.*",
       "**/node_modules/**"
     ]
-  }
+  },
+  "storage": [
+    {
+      "origin": ["*"],
+      "method": ["GET"],
+      "maxAgeSeconds": 3600
+    }
+  ]
 }

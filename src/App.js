@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import AuthProvider, { useAuth } from './context/AuthContext';
 import ResponsiveAppBar from './components/Navbar/NavBar';
@@ -13,9 +13,11 @@ import Footer from './pages/Footer/Footer';
 import Landing from "./pages/LandingPage/Landing";
 import GameRules from './pages/GameRules/GameRules';
 
+
 function App() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+
 
   return (
     <div className="App">

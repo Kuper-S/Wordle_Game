@@ -66,43 +66,7 @@ function AuthProvider({ children }) {
       throw new Error("Failed to update user data: " + error.message);
     }
   };
-  
-  // const updateUserData = async (newWordsGuessed, newAttempts, overallScore) => {
-  //   if (!currentUser) {
-  //     throw new Error("No user is currently logged in");
-  //   }
-  
-  //   try {
-  //     const userRef = firestore.collection("users").doc(currentUser.uid);
-  //     const doc = await userRef.get();
-  
-  //     if (doc.exists) {
-  //       const userData = doc.data();
-  //       const currentOverallScore = userData?.overallScore || 0;
-  
-  //       if (overallScore > currentOverallScore || newWordsGuessed.length > userData.wordsGuessed.length) {
-  //         await userRef.update({
-  //           wordsGuessed: newWordsGuessed || userData.wordsGuessed || [],
-  //           overallScore: overallScore,
-  //         });
-  
-  //         setCurrentUser((prevUser) => ({
-  //           ...prevUser,
-  //           wordsGuessed: newWordsGuessed || userData.wordsGuessed || [],
-  //           overallScore: overallScore,
-  //         }));
-  //       }
-  //     } else {
-  //       console.log('Set Current User Error');
-  //       throw new Error("User document does not exist");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating user data:", error);
-  //     throw new Error("Failed to update user data: " + error.message);
-  //   }
-  // };
-  
-  
+
 
   const logIn = (email, password) => {
     return auth.signInWithEmailAndPassword(email, password);

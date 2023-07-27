@@ -1,0 +1,35 @@
+[debug] [2023-07-26T07:37:47.628Z] ----------------------------------------------------------------------
+[debug] [2023-07-26T07:37:47.631Z] Command:       C:\Users\dell\.nvm\versions\node\v16.13.2\bin\node.exe C:\Users\dell\.nvm\versions\node\v16.13.2\bin\node_modules\firebase-tools\lib\bin\firebase.js deploy --only storage --debug
+[debug] [2023-07-26T07:37:47.631Z] CLI Version:   12.4.6
+[debug] [2023-07-26T07:37:47.632Z] Platform:      win32
+[debug] [2023-07-26T07:37:47.634Z] Node Version:  v16.13.2
+[debug] [2023-07-26T07:37:47.637Z] Time:          Wed Jul 26 2023 10:37:47 GMT+0300 (Israel Daylight Time)
+[debug] [2023-07-26T07:37:47.637Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-07-26T07:37:47.826Z] Field ".storage" in "firebase.json" is possibly invalid: should be object
+[debug] [2023-07-26T07:37:47.829Z] Object ".storage[0]" in "firebase.json" has unknown property: {"additionalProperty":"origin"}
+[debug] [2023-07-26T07:37:47.830Z] Field ".storage" in "firebase.json" is possibly invalid: should match some schema in anyOf
+[debug] [2023-07-26T07:37:47.843Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-07-26T07:37:47.845Z] > authorizing via signed-in user (kupkup1992@gmail.com)
+[debug] [2023-07-26T07:37:47.846Z] [iam] checking project wordle-game-superkuper for permissions ["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2023-07-26T07:37:47.857Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/wordle-game-superkuper:testIamPermissions [none]
+[debug] [2023-07-26T07:37:47.860Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/wordle-game-superkuper:testIamPermissions x-goog-quota-user=projects/wordle-game-superkuper
+[debug] [2023-07-26T07:37:47.862Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/wordle-game-superkuper:testIamPermissions {"permissions":["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2023-07-26T07:37:48.611Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/wordle-game-superkuper:testIamPermissions 200
+[debug] [2023-07-26T07:37:48.612Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/wordle-game-superkuper:testIamPermissions {"permissions":["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[info] 
+[info] === Deploying to 'wordle-game-superkuper'...
+[info] 
+[info] i  deploying storage 
+[debug] [2023-07-26T07:37:49.018Z] TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:371:5)
+    at validateString (node:internal/validators:119:11)
+    at Object.join (node:path:429:7)
+    at Config.path (C:\Users\dell\.nvm\versions\node\v16.13.2\bin\node_modules\firebase-tools\lib\config.js:123:45)
+    at RulesDeploy.addFile (C:\Users\dell\.nvm\versions\node\v16.13.2\bin\node_modules\firebase-tools\lib\rulesDeploy.js:37:46)
+    at default_1 (C:\Users\dell\.nvm\versions\node\v16.13.2\bin\node_modules\firebase-tools\lib\deploy\storage\prepare.js:39:25)
+    at chain (C:\Users\dell\.nvm\versions\node\v16.13.2\bin\node_modules\firebase-tools\lib\deploy\index.js:38:15)
+    at deploy (C:\Users\dell\.nvm\versions\node\v16.13.2\bin\node_modules\firebase-tools\lib\deploy\index.js:95:11)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+[error] 
+[error] Error: An unexpected error has occurred.
