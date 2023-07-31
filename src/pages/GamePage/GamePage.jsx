@@ -6,10 +6,12 @@ import Board from "./Board";
 import Confetti from 'react-confetti';
 import GameOver from "./GameOver";
 import Keyboard from "./Keyboard";
-import { boardDefault, generateWordSet } from "./Words";
+import { boardDefault } from "./Words";
 import { useAuth } from "../../context/AuthContext";
 import useUserData from "../../Hooks/useUserData";
 import Example from "../../components/Modals/PopUpModal";
+import { fetchRandomCorrectWord } from "../../Hooks/useRandomWordApi";
+import { fetchGameWords } from "../../api/fetchGameWords";
 
 export const GameContext = React.createContext();
 
@@ -19,6 +21,7 @@ const MemoizedKeyboard = React.memo(Keyboard);
 function GamePage() {
   const navigate = useNavigate();
   const { userData, loading } = useUserData();
+  const [loadingData , setLoadingData ] = useState(false);
   const { currentUser, updateUserData } = useAuth();
   const [gameState, setGameState] = useState({
     board: boardDefault,
@@ -38,7 +41,7 @@ function GamePage() {
     showEndGameButton: false,
     setDisabledLetters: () => {},
   });
-  const [loadingScoreboard, setLoadingScoreboard] = useState(false);
+  const [loadingScoreboard, setLoadingDataScoreboard] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const {
@@ -59,64 +62,77 @@ function GamePage() {
   } = gameState;
 
   const setGameStateProperty = (property, value) => {
-    setGameState((prevState) => ({
-      ...prevState,
-      [property]: value,
-    }));
+    if (property === "gameFinished" && value) {
+      // Reset the board to its default state when the game finishes
+      setGameState((prevState) => ({
+        ...prevState,
+        [property]: value,
+        board: boardDefault,
+      }));
+    } else {
+      setGameState((prevState) => ({
+        ...prevState,
+        [property]: value,
+      }));
+    }
   };
-  console.log(correctWord);
+  console.log('gameState',gameState);
+  console.log('Index',wordIndex);
+  console.log('currentAttempt', currAttempt);
+  console.log('numAttempts',numAttempts);
+
   useEffect(() => {
     if (loading || !currentUser) {
       return;
     }
 
     const fetchData = async () => {
-      setLoadingScoreboard(true);
-      setGameState((prevState) => ({
-        ...prevState,
-        board: boardDefault,
-        currAttempt: { attempt: 0, letter: 0 },
-        wordSet: new Set(),
-        correctWord: "",
-        gameFinished: false,
-        disabledLetters: [],
-        gameOver: { gameOver: false, guessedWord: false },
-        numAttempts: 0,
-        wordList: [],
-        wordIndex: 0,
-        numWordsGuessed: wordsGuessed.length,
-        wordsGuessed: [],
-        totalAttempts: 0,
-        showNextWordButton: false,
-        showEndGameButton: false,
-      }));
-
       try {
-        const words = await generateWordSet();
+        setLoadingData(true);
+    
+        // Fetch all words from Firestore
+        const words = await fetchGameWords();
+    
+        // Randomly select one word from the fetched words
+        const randomCorrectWord = words[Math.floor(Math.random() * words.length)];
+    
+        // Update the game state with the fetched data
         setGameState((prevState) => ({
           ...prevState,
-          wordSet: words.wordSet,
-          wordList: Array.from(words.wordSet),
-          correctWord: words.todaysWord,
-          setDisabledLetters: () => {},
+          board: boardDefault,
+          currAttempt: { attempt: 0, letter: 0 },
+          wordSet: new Set(words),
+          correctWord: randomCorrectWord,
+          gameFinished: false,
+          disabledLetters: [],
+          gameOver: { gameOver: false, guessedWord: false },
+          numAttempts: 0,
+          wordList: Array.from(new Set(words)), // Convert the words array to a Set and then back to an array to remove duplicates
+          wordIndex: 0,
+          numWordsGuessed: wordsGuessed.length,
+          wordsGuessed: [],
+          totalAttempts: 0,
+          showNextWordButton: false,
+          showEndGameButton: false,
         }));
+
+        setLoadingData(false);
       } catch (error) {
         console.error("Failed to generate word set:", error);
+        setLoadingData(false);
       }
-
-      setLoadingScoreboard(false);
     };
 
     fetchData();
-  }, [currentUser, loading]);
-
+  }, [currentUser, loading, setLoadingData]);
+  console.log(correctWord);
   const updateUserScore = async (newWordsGuessed, newAttempts) => {
     try {
       await updateUserData(newWordsGuessed, newAttempts);
       
     } catch (error) {
       console.error("Error updating user data:", error);
-      // Handle error state or show an error message to the user
+      
     }
   };
 
@@ -126,29 +142,32 @@ function GamePage() {
     const enteredWord = board[currAttempt.attempt].join("");
   
     if (wordSet.has(enteredWord.toLowerCase())) {
+      // Word is correct, but not the correct word for this round
       setGameStateProperty("currAttempt", {
         attempt: currAttempt.attempt + 1,
         letter: 0,
       });
+  
+      if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
+        // User guessed the correct word
+        setGameState((prevState) => ({
+          ...prevState,
+          gameFinished: true,
+          showNextWordButton: true,
+          wordsGuessed: [...prevState.wordsGuessed, enteredWord],
+          gameOver: { gameOver: true, guessedWord: true },
+          wordIndex: wordIndex + 1, // Increment wordIndex when the correct word is guessed
+        }));
+        toast.success("Great job!");
+        setShowConfetti(true);
+  
+        // Update user score when the game is over
+        await updateUserScore(wordsGuessed, numAttempts);
+  
+        return;
+      }
     } else {
       toast.error("Word not found");
-      return;
-    }
-  
-    if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
-      setGameState((prevState) => ({
-        ...prevState,
-        gameFinished: true,
-        showNextWordButton: true,
-        wordsGuessed: [...prevState.wordsGuessed, enteredWord],
-        gameOver: { gameOver: true, guessedWord: true },
-      }));
-      toast.success("Great job!");
-      setShowConfetti(true);
-  
-      // Update user score when the game is over
-      await updateUserScore(wordsGuessed, numAttempts);
-  
       return;
     }
   
@@ -168,18 +187,71 @@ function GamePage() {
     }
   };
 
+  // const onEnter = async () => {
+  //   if (currAttempt.letter !== 5) return;
   
+  //   const enteredWord = board[currAttempt.attempt].join("");
+  
+  //   if (wordSet.has(enteredWord.toLowerCase())) {
+  //     setGameStateProperty("currAttempt", {
+  //       attempt: currAttempt.attempt + 1,
+  //       letter: 0,
+  //     });
+  
+  //     if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
+  //       setGameStateProperty("wordIndex", wordIndex + 1);
+  //     }
+  //   } else {
+  //     toast.error("Word not found");
+  //     return;
+  //   }
+  
+  //   if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
+  //     if (currAttempt.attempt === 5) {
+  //       setGameState((prevState) => ({
+  //         ...prevState,
+  //         gameFinished: true,
+  //         showNextWordButton: true,
+  //         wordsGuessed: [...prevState.wordsGuessed, enteredWord],
+  //         gameOver: { gameOver: true, guessedWord: true },
+  //         wordIndex: wordIndex + 1, // Increment wordIndex when the correct word is guessed in the last attempt
+  //       }));
+  //       toast.success("Great job!");
+  //       setShowConfetti(true);
+  
+  //       // Update user score when the game is over
+  //       await updateUserScore(wordsGuessed, numAttempts);
+  
+  //       return;
+  //     }
+  //   }
+  
+  //   setGameStateProperty("numAttempts", numAttempts + 1);
+  
+  //   if (currAttempt.attempt === 5) {
+  //     setGameState((prevState) => ({
+  //       ...prevState,
+  //       gameFinished: true,
+  //       gameOver: { gameOver: true, guessedWord: false },
+  //     }));
+  
+  //     // Update user score when the game is over
+  //     await updateUserScore(wordsGuessed, numAttempts);
+  
+  //     return;
+  //   }
+  // };
+
   const handleNextWord = async () => {
-    const words = await generateWordSet();
+    const words = await fetchGameWords();
     const guessedWord = board[currAttempt.attempt].join("");
     const updatedWordsGuessed = [...wordsGuessed, guessedWord].filter(Boolean);
-    
-    console.log("currAttempt.attempt" ,currAttempt.attempt)
+  
     setShowConfetti(false);
     setGameState((prevState) => ({
       ...prevState,
-      wordSet: words.wordSet,
-      correctWord: words.todaysWord,
+      wordSet: new Set(words),
+      correctWord: words[Math.floor(Math.random() * words.length)].trim(),
       wordIndex: wordIndex + 1,
       board: boardDefault,
       currAttempt: { attempt: 0, letter: 0 },
@@ -201,7 +273,7 @@ function GamePage() {
       try {
         setShowConfetti(false);
         setGameStateProperty("showEndGameButton", true);
-        setLoadingScoreboard(true);
+        setLoadingDataScoreboard(true);
         
         navigate("/scoreboard", { state: { userData } });
         // Remove the navigate line from here
@@ -218,13 +290,12 @@ function GamePage() {
 
 
   const handleRestartGame = async () => {
-    const words = await generateWordSet();
+    const words = await fetchGameWords();
     setShowConfetti(false);
     setGameState((prevState) => ({
       ...prevState,
-      wordList: words.wordSet,
-      wordSet: words.wordSet,
-      correctWord: words.todaysWord,
+      wordSet: new Set(words),
+      correctWord: words[Math.floor(Math.random() * words.length)].trim(),
       wordIndex: 0,
       wordsGuessed: [],
       totalAttempts: 0,
@@ -238,6 +309,8 @@ function GamePage() {
       showNextWordButton: false,
     }));
   };
+  
+  
 
   const onSelectLetter = (key) => {
     if (currAttempt.letter > 4) return;

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Button from "react-bootstrap/Button";
-
 import ContriGraph from "../../assets/contrigraph.svg";
 import "./Landing.css";
 

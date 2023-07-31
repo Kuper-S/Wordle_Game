@@ -2,7 +2,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore"; // Import the Firestore module
 import wordBank from "../utils/wordle-bank.txt";
 
-export const generateWordSet = async () => {
+export const generateWordSetApiCall = async () => {
   try {
     const wordSet = new Set();
     const todaysWord = [];

@@ -183,7 +183,9 @@ nav h1 {
  
   background-color: gray;
 }
-
+.letter.correct-letter {
+  background-color: green;
+}
 .keyboard {
   width: 700px;
   

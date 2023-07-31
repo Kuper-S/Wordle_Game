@@ -1,7 +1,9 @@
 import React, { useContext, useState } from "react";
 import { GameContext } from "./GamePage";
 
+
 function Key({ keyVal, bigKey, disabled }) {
+  
   const { gameOver, onSelectLetter, onDelete, onEnter } = useContext(GameContext);
   const [isPressed, setIsPressed] = useState(false);
 
