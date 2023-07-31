@@ -187,61 +187,6 @@ function GamePage() {
     }
   };
 
-  // const onEnter = async () => {
-  //   if (currAttempt.letter !== 5) return;
-  
-  //   const enteredWord = board[currAttempt.attempt].join("");
-  
-  //   if (wordSet.has(enteredWord.toLowerCase())) {
-  //     setGameStateProperty("currAttempt", {
-  //       attempt: currAttempt.attempt + 1,
-  //       letter: 0,
-  //     });
-  
-  //     if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
-  //       setGameStateProperty("wordIndex", wordIndex + 1);
-  //     }
-  //   } else {
-  //     toast.error("Word not found");
-  //     return;
-  //   }
-  
-  //   if (enteredWord.toLowerCase() === correctWord.toLowerCase()) {
-  //     if (currAttempt.attempt === 5) {
-  //       setGameState((prevState) => ({
-  //         ...prevState,
-  //         gameFinished: true,
-  //         showNextWordButton: true,
-  //         wordsGuessed: [...prevState.wordsGuessed, enteredWord],
-  //         gameOver: { gameOver: true, guessedWord: true },
-  //         wordIndex: wordIndex + 1, // Increment wordIndex when the correct word is guessed in the last attempt
-  //       }));
-  //       toast.success("Great job!");
-  //       setShowConfetti(true);
-  
-  //       // Update user score when the game is over
-  //       await updateUserScore(wordsGuessed, numAttempts);
-  
-  //       return;
-  //     }
-  //   }
-  
-  //   setGameStateProperty("numAttempts", numAttempts + 1);
-  
-  //   if (currAttempt.attempt === 5) {
-  //     setGameState((prevState) => ({
-  //       ...prevState,
-  //       gameFinished: true,
-  //       gameOver: { gameOver: true, guessedWord: false },
-  //     }));
-  
-  //     // Update user score when the game is over
-  //     await updateUserScore(wordsGuessed, numAttempts);
-  
-  //     return;
-  //   }
-  // };
-
   const handleNextWord = async () => {
     const words = await fetchGameWords();
     const guessedWord = board[currAttempt.attempt].join("");
