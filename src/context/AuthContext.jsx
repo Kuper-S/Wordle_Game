@@ -30,12 +30,20 @@ function AuthProvider({ children }) {
       await user.updateProfile({ displayName: username });
       
       await userRef.set(userData);
-      
       console.log(user);
       return { uid: user.uid, ...userData };
     } catch (error) {
-      // adding error about email address that is not valid or exsits, also userName.
-      throw new Error("Failed to sign up: " + error.message);
+      // Handle specific error cases and provide user-friendly messages
+      if (error.code === "auth/invalid-email") {
+        throw new Error("Invalid email address. Please provide a valid email.");
+      } else if (error.code === "auth/email-already-in-use") {
+        throw new Error("Email address already in use. Please use a different email.");
+      } else if (error.code === "auth/weak-password") {
+        throw new Error("Weak password. Please use a stronger password.");
+      } else {
+        // For other errors, provide a generic error message
+        throw new Error("Failed to sign up. Please try again later.");
+      }
     }
   };
   
@@ -73,6 +81,8 @@ function AuthProvider({ children }) {
   };
 
   const logOut = () => {
+    // Clear the user session and remove the token from local storage
+    localStorage.removeItem("token");
     return auth.signOut();
   };
 
@@ -132,7 +142,7 @@ function AuthProvider({ children }) {
       } else {
         // User is not logged in, check if there is a token in local storage
         const token = localStorage.getItem("token");
-
+        console.log('localStorage token before: ' , token);
         if (token) {
           // Token exists, try to sign in with the token
           try {
@@ -141,13 +151,18 @@ function AuthProvider({ children }) {
             setLoading(false);
           } catch (error) {
             console.error("Failed to sign in with token:", error);
+            console.error("Error code:", error.code);
+            console.error("Error message:", error.message);
             setCurrentUser(null);
             setLoading(false);
           }
+          console.log('localStorage token after: ' , token);
         } else {
           // No token, user is not logged in
+          localStorage.removeItem("token");
           setCurrentUser(null);
           setLoading(false);
+
         }
       }
     });
@@ -156,19 +171,21 @@ function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    // Save the user token in local storage when the user is logged in
     if (currentUser) {
-      auth.currentUser
-        .getIdToken(/* forceRefresh */ true)
+      // Save the user token in local storage when the user is logged in
+      currentUser.getIdToken(/* forceRefresh */ true)
         .then((token) => {
           localStorage.setItem("token", token);
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Failed to get user token:", error);
+          setLoading(false);
         });
     } else {
       // Remove the token from local storage when the user logs out
       localStorage.removeItem("token");
+      setLoading(false);
     }
   }, [currentUser]);
 

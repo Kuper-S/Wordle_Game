@@ -18,6 +18,7 @@ const Home = () => {
       await logOut();
       navigate('/');
     } catch (error) {
+      console.log('ERROR' , error.message);
       toast.error('Failed to log out');
     }
   };

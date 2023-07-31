@@ -11,7 +11,7 @@ function SignUp() {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
   const { signup, signInWithGoogle } = useAuth();
-  
+
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -20,16 +20,14 @@ function SignUp() {
     }
 
     setLoading(true);
+    setError("");
     try {
-      setError("");
       const { email, password, username } = data;
       await signup(email, password, username);
-      
       navigate("/home", { replace: true });
     } catch {
       setError("Failed to create an account");
     }
-  
     setLoading(false);
   };
 
@@ -39,75 +37,77 @@ function SignUp() {
       setLoading(true);
       await signInWithGoogle();
       navigate("/home", { replace: true });
-    } catch {
+    } catch (error) {
       setError("Failed to sign in with Google");
+    } finally {
       setLoading(false);
     }
-  };
+  };  
+  
+  
 
   return (
     <div className="signin_page d-flex justify-content-center align-items-center">
+      <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "40%" }}>
+        <h1 className="text-center mb-4">Sign Up</h1>
+        {error && <Alert variant="danger">{error}</Alert>}
+        {loading && <Loading />}
+        <Form.Group className="mb-3">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            {...register("email")}
+            type="email"
+            placeholder="Enter email"
+          />
+        </Form.Group>
 
-    <Form onSubmit={handleSubmit(onSubmit)} style={{ width: "40%" }}>
-      <h1 className="text-center mb-4">Sign Up</h1>
-      {error && <Alert variant="danger">{error}</Alert>}
-      {loading && <Loading />}
-      <Form.Group className="mb-3">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control
-          {...register("email")}
-          type="email"
-          placeholder="Enter email"
-        />
-      </Form.Group>
-
-      <Form.Group className="mb-3">
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          {...register("password")}
-          type="password"
-          placeholder="Password"
-        />
-      </Form.Group>
-      <Form.Group className="mb-3">
-        <Form.Label>Confirm Password</Form.Label>
-        <Form.Control
-          {...register("confirmPassword")}
-          type="password"
-          placeholder="Confirm Password"
-        />
-      </Form.Group>
-      <Form.Group className="mb-3">
-        <Form.Label>Username</Form.Label>
-        <Form.Control
-          {...register("username")}
-          type="text"
-          placeholder="Enter username"
-        />
-      </Form.Group>
-      <Button
-        className="mt-3"
-        style={{ width: "60%" }}
-        variant="success"
-        type="submit"
-      >
-        Sign Up
-      </Button>
-      <Button
-        className="mt-3"
-        style={{ width: "60%" }}
-        variant="primary"
-        onClick={handleGoogleSignIn}
-      >
-        Sign Up with Google
-      </Button>
-      <p className="text-center mt-3">
-        Already have an account?{" "}
-        <Link className="text-decoration-none" to="/login">
-          Log In
-        </Link>
-      </p>
-    </Form>
+        <Form.Group className="mb-3">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            {...register("password")}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            {...register("confirmPassword")}
+            type="password"
+            placeholder="Confirm Password"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            {...register("username")}
+            type="text"
+            placeholder="Enter username"
+          />
+        </Form.Group>
+        <Button
+          className="mt-3"
+          style={{ width: "60%" }}
+          variant="success"
+          type="submit"
+        >
+          Sign Up
+        </Button>
+        <Button
+          className="mt-3"
+          style={{ width: "60%" }}
+          variant="primary"
+          onClick={handleGoogleSignIn}
+        >
+          Sign Up with Google
+        </Button>
+        <p className="text-center mt-3">
+          Already have an account?{" "}
+          <Link className="text-decoration-none" to="/login">
+            Log In
+          </Link>
+        </p>
+      </Form>
     </div>
   );
 }

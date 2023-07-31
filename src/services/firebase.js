@@ -4,13 +4,14 @@ import "firebase/compat/firestore";
 import 'firebase/compat/storage';
 
 const app = firebase.initializeApp({
-  apiKey: "AIzaSyDpIsXIFQNhkJ6O7rkz0eURYv9IJL3C9iU",
-  authDomain: "wordle-game-superkuper.firebaseapp.com",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   projectId: "wordle-game-superkuper",
-  storageBucket: "wordle-game-superkuper.appspot.com",
-  messagingSenderId: "959762425502",
-  appId: "1:959762425502:web:ae8fded2779d79d86b3d8f",
-  measurementId: "G-MB0Q207D79"
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
 })
 
 export const auth = app.auth()
@@ -19,3 +20,9 @@ export const db = firestore;
 export const storage = app.storage();
 
 export default app;
+
+
+
+
+
+

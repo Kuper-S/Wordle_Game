@@ -11,13 +11,24 @@ function TopPlayers() {
   const fetchTopPlayersData = async () => {
     try {
       const usersData = await fetchAllUsersData();
-
-      // Sort the users by score in descending order to get the top players
-      const sortedUsers = usersData.sort((a, b) => b.score - a.score);
-
+  
+      // Filter users with at least one word guessed and a valid username
+      const filteredUsersData = usersData.filter(
+        (user) =>
+          user?.username && // Check if username property exists
+          user?.wordsGuessed?.length > 0
+      );
+  
+      // Calculate the overall score based on words guessed and total attempts
+      const sortedUsers = filteredUsersData.sort((a, b) => {
+        const scoreA = a.wordsGuessed.length * (a.totalAttempts || 1);
+        const scoreB = b.wordsGuessed.length * (b.totalAttempts || 1);
+        return scoreB - scoreA; // Sort in descending order
+      });
+  
       // Get the top 3 players (or less if there are fewer than 3 players)
       const topPlayers = sortedUsers.slice(0, 3);
-       console.log(topPlayers);
+      console.log(topPlayers);
       setTopPlayers(topPlayers);
     } catch (error) {
       console.error("Error fetching top players data:", error);

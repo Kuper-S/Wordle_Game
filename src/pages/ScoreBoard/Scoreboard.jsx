@@ -34,7 +34,7 @@ function ScoreBoard() {
   }, []);
 
   const popover = (
-    <Popover id="scoreExplanationPopover">
+    <Popover id="scoreExplanationPopover" >
       <Popover.Body sx={{ p: 2 }}>
         The overall score is calculated based on the number of words guessed correctly and the number of attempts made. The score rewards players who guessed more words accurately with fewer attempts.
       </Popover.Body>
@@ -73,8 +73,6 @@ function ScoreBoard() {
       </div>
     );
   }
-
- 
 
   return (
     <div className="scoreboard-container">

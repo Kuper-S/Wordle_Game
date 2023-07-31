@@ -10,7 +10,6 @@ import { boardDefault } from "./Words";
 import { useAuth } from "../../context/AuthContext";
 import useUserData from "../../Hooks/useUserData";
 import Example from "../../components/Modals/PopUpModal";
-import { fetchRandomCorrectWord } from "../../Hooks/useRandomWordApi";
 import { fetchGameWords } from "../../api/fetchGameWords";
 
 export const GameContext = React.createContext();
@@ -41,7 +40,7 @@ function GamePage() {
     showEndGameButton: false,
     setDisabledLetters: () => {},
   });
-  const [loadingScoreboard, setLoadingDataScoreboard] = useState(false);
+  const [ setLoadingDataScoreboard ] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const {
@@ -82,12 +81,14 @@ function GamePage() {
   console.log('numAttempts',numAttempts);
 
   useEffect(() => {
-    if (loading || !currentUser) {
+    if (loading || !currentUser || loadingData) {
       return;
     }
-
+    
     const fetchData = async () => {
+      
       try {
+      
         setLoadingData(true);
     
         // Fetch all words from Firestore
@@ -124,8 +125,11 @@ function GamePage() {
     };
 
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, loading, setLoadingData]);
   console.log(correctWord);
+
+
   const updateUserScore = async (newWordsGuessed, newAttempts) => {
     try {
       await updateUserData(newWordsGuessed, newAttempts);
@@ -318,7 +322,7 @@ function GamePage() {
     setShowModal(false);
   };
 
-
+  
   const confettiConfig = {
     angle: 90,
     spread: 360,
@@ -370,6 +374,7 @@ function GamePage() {
           }}
         >
           <div className="game">
+         
             {showConfetti && <Confetti config={confettiConfig} />}
             <p className="attempts">Number of Attempts: {numAttempts}</p>
             <p className="attempts">Total Attempts: {totalAttempts}</p>
