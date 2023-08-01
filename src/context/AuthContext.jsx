@@ -81,7 +81,6 @@ function AuthProvider({ children }) {
   };
 
   const logOut = () => {
-    // Clear the user session and remove the token from local storage
     localStorage.removeItem("token");
     return auth.signOut();
   };
@@ -140,7 +139,6 @@ function AuthProvider({ children }) {
         setCurrentUser(user);
         setLoading(false);
       } else {
-        // User is not logged in, check if there is a token in local storage
         const token = localStorage.getItem("token");
         console.log('localStorage token before: ' , token);
         if (token) {
