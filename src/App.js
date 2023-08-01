@@ -9,10 +9,9 @@ import SignUp from './pages/UserAuthPages/SignUp';
 import ForgetPassword from './pages/UserAuthPages/ForgetPassword';
 import ScoreBoard from './pages/ScoreBoard/ScoreBoard';
 import GamePage from './pages/GamePage/GamePage';
-import Footer from './pages/Footer/Footer';
 import Landing from "./pages/LandingPage/Landing";
 import GameRules from './pages/GameRules/GameRules';
-
+import Footer from './components/Footer/Footer';
 
 function App() {
   const { currentUser } = useAuth();

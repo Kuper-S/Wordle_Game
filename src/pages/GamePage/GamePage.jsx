@@ -40,7 +40,7 @@ function GamePage() {
     showEndGameButton: false,
     setDisabledLetters: () => {},
   });
-  const [ setLoadingDataScoreboard ] = useState(false);
+  const [loadingDataScoreboard, setLoadingDataScoreboard ] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const {

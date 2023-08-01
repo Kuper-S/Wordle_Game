@@ -21,21 +21,22 @@ const Landing = () => {
         animate="visible"
         variants={logoVariants}
       >
-        <motion.h1 className="landing_title">Are you GOOD enough?</motion.h1>
-        <motion.p className="landing_p">Guess the Word and be the CHAMP</motion.p>
+        <motion.h1 className="landing_title">Are you GOOD enough ?</motion.h1>
+        <motion.h3 className="landing_subtitle">SINGIN Or SINGUP</motion.h3>
+        
+        <div className="landing-btn">
         <Button variant="outline-warning">
           <Link to="/login" class>
-            Sing IN<i className="fa-solid fa-arrow-right"></i>
+            Sing In<i className="fa-solid fa-arrow-right"></i>
           </Link>
         </Button>
-        
-        <motion.p className="landing_p">or</motion.p>
+     
         <Button variant="outline-info" >
         <Link to="/signup" class>
-          Sing UP<i className="fa-solid fa-arrow-right"></i>
+          Sing Up<i className="fa-solid fa-arrow-right"></i>
         </Link>
         </Button>
-        
+        </div>
       <img src={ContriGraph} alt="" className="graph" />
       </motion.div>
      

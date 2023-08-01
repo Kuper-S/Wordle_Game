@@ -62,7 +62,6 @@ function Profile() {
   };
   
 
-  
   return (
     <div className="profile-container">
       <h2>{currentUser?.displayName}</h2>

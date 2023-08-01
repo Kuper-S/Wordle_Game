@@ -8,17 +8,21 @@ function GameOver() {
   return (
     <div className="gameOver">
       {gameOver.guessedWord ? (
-        <Alert variant="success">
-          <Alert.Heading>You Correctly Guessed the Wordle</Alert.Heading>
-          <p className="gameover-alert">You guessed in {currAttempt.attempt} attempts</p>
+        <Alert variant="info" className="alert-guessed">
           
-          <p className="gameover-alert">Correct Word: {correctWord.toUpperCase()}</p>
+          <h1>You guessed in {currAttempt.attempt} attempts</h1>
+          
+          <h3>Correct Word: {correctWord.toUpperCase()}</h3>
         </Alert>
       ) : (
         <Alert variant="danger">
-          <Alert.Heading>You Failed to Guess the Word</Alert.Heading>
-         
-          <p className="gameover-alert">Correct Word: {correctWord.toUpperCase()}</p>
+          <Alert.Heading>
+            <h1 className="wrong-message">You Failed to Guess the Word</h1>
+          </Alert.Heading>
+          
+          
+          <h3 className="wrong-word">Correct Word: {correctWord.toUpperCase()}</h3>
+          
         </Alert>
       )}
     </div>

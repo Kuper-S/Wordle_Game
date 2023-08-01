@@ -76,10 +76,8 @@ function ScoreBoard() {
 
   return (
     <div className="scoreboard-container">
-      <h1>Scoreboard 🏅</h1>
-      {currentUser && (
-        <h2>{currentUser.displayName}</h2>
-      )}
+      <h1 className="scoreboard-title">Scoreboard</h1>
+      <h3>🥇🥈🥉</h3>
       <div className="scoreExplanationTh">
         <OverlayTrigger trigger={['hover', 'hover']} placement="right" overlay={popover}>
           <span>Overall Score ℹ️</span>
@@ -108,13 +106,17 @@ function ScoreBoard() {
               ))}
             </tbody>
           </Table>
-          <Button variant="light" onClick={handleNewGameButton}>
+          
+        </div>
+        <div className='scoreboard-buttons'>
+        <Button variant="light" onClick={handleNewGameButton}>
             New Game 🕹️
           </Button>
-        </div>
         <Button variant="success" onClick={handleToHomePage}>
           Back Home🏠
         </Button>
+        </div>
+        
       </div>
     </div>
   );

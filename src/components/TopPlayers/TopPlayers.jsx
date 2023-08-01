@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchAllUsersData } from "../../api/fetchUserData"; // Replace "../api/apiFile" with the correct path to your API file
+import { fetchAllUsersData } from "../../api/fetchUserData"; 
 
 function TopPlayers() {
   const [topPlayers, setTopPlayers] = useState([]);
@@ -37,7 +37,7 @@ function TopPlayers() {
 
   return (
     <div className="top-players-container">
-      <h2>Top 3 Players</h2>
+      <h2 className="top-players-header">Top 3 Players</h2>
       <ul className="top-players-list">
         {topPlayers.map((player, index) => (
           <li key={index}>

@@ -28,8 +28,33 @@
   font-weight:bolder;
 }
 
+.landing_title{
+  font-family: "Russo One", sans-serif;
+  padding-bottom: 50px;
+  text-transform: uppercase;
+  font-size: 2.8em;
+  transform: translatey(25px);
+  background: linear-gradient( cornflowerblue 30%, white, darkmagenta 60%, cornflowerblue 100% );
+  background-size: contain;
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 1px silver;
+  filter: drop-shadow(5px 5px 1px black) drop-shadow(1px 1px 1px magenta);
+  animation: bg-shift 0.5s ease-in-out infinite alternate;
+}
 
-
+.landing_subtitle{
+  
+  padding-bottom: 50px;
+  text-transform: uppercase;
+  font-size: 2em;
+  transform: translatey(25px);
+  background: linear-gradient( rgb(164, 100, 237) 30%, white, darkmagenta 60%, cornflowerblue 100% );
+  background-size: contain;
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 1px silver;
+  filter: drop-shadow(5px 5px 1px black) drop-shadow(1px 1px 1px magenta);
+  animation: bg-shift 0.5s ease-in-out infinite alternate;
+}
 .landing a {
   text-decoration: none;
   color: inherit;
@@ -55,6 +80,13 @@
 .landing .graph {
   max-width: 100%;
   object-fit: cover;
+}
+.landing-btn {
+  display: flex;
+  flex-direction: column;
+  padding: 100px;
+  margin-bottom: 30px;
+  
 }
 
 @media (max-width: 1200px) {

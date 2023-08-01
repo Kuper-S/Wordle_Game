@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Landing from "../LandingPage/Landing";
 import HomeGameBtn from "../../components/Buttons/HomeGameBtn";
-import AnimatedTitle from "../../assets/AnimatedTitle/animatedTitle";
+
 const Home = () => {
   const { currentUser, logOut } = useAuth();
   const navigate = useNavigate();
@@ -31,9 +31,8 @@ const Home = () => {
   
   return (
     <Container className="home-container">
-      <AnimatedTitle/>
-      {/* <StyledHeader/> */}
-      <h1>Welcome {currentUser.displayName}! 🚀</h1>
+     
+      <h1 className="homepage-title">Welcome {currentUser.displayName}! 🚀</h1>
       <Row className="justify-content-center">
       <TopPlayers />
       <ToastContainer />

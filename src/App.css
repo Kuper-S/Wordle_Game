@@ -8,6 +8,50 @@
   padding-right: 0;
   color: rgb(0, 0, 0);
 }
+@import url("https://fonts.googleapis.com/css2?family=Russo+One&family=Yellowtail&display=swap");
+:root {
+	--navy: #0c0c4a;
+	--dark-navy: #060726;
+	--pink: rgba(213, 84, 213, 1);
+	--pink2: rgba(213, 84, 213, 0.7);
+}
+h1 {
+	color: transparent;
+	font-family: "Russo One", sans-serif;
+	text-transform: uppercase;
+	font-size: 2em;
+	
+	background: linear-gradient(
+		cornflowerblue 30%,
+		white,
+		darkmagenta 60%,
+		cornflowerblue 100%
+	);
+	background-size: contain;
+	-webkit-background-clip: text;
+	-webkit-text-stroke: 1px silver;
+	filter: drop-shadow(5px 5px 1px black) drop-shadow(1px 1px 1px magenta);
+	animation: bg-shift 0.5s ease-in-out infinite alternate;
+}
+h2 {
+	color: white;
+	
+	font-weight: 100;
+	font-size: 2.5em;
+	
+	text-shadow: 0 0 3px magenta, 0 0 7px magenta, 0 0 15px black, 0 0 15px black;
+	animation: hover 1s ease-in-out infinite;
+}
+h3 {
+  color: white;
+font-family: "Russo One";
+font-weight: 400;
+font-size: 3em;
+padding: 20px;
+text-shadow: 0 0 3px rgb(233, 233, 233), 0 0 7px rgb(117, 66, 238), 0 0 15px black, 0 0 15px black;
+
+}
+
 .gamepage {
   text-align: center;
   background-color: #121212;
@@ -40,8 +84,30 @@
   padding: 150px;
   color :azure;
 }
+.homepage-title{
+  color: transparent;
+	font-family: "Russo One", sans-serif;
+	text-transform: uppercase;
+	font-size: 3em;
+  padding-bottom: 60px;
+	transform: translatey(2px);
+	background: linear-gradient(
+		cornflowerblue 30%,
+		rgb(148, 0, 247),
+		darkmagenta 60%,
+		cornflowerblue 100%
+	);
+	background-size: contain;
+	-webkit-background-clip: text;
+	-webkit-text-stroke: 1px silver;
+	filter: drop-shadow(5px 5px 1px black) drop-shadow(1px 1px 1px magenta);
+	animation: bg-shift 0.5s ease-in-out infinite alternate;
+}
 .home-logout{
   margin-top: 350px;
+}
+.homepage-game-btn{
+  transform: scale(1.05);
 }
 .footer {
   position: fixed;
@@ -115,7 +181,6 @@ nav h1 {
 }
 .example-scores-table {
   width: 300px;
-  
   margin: 20px auto;
   border-collapse: collapse;
 }
@@ -250,12 +315,40 @@ nav h1 {
 
 .gameOver{
   padding: 10px;
+  padding: 20px;
+  
 }
-.gameover-alert{
-  color:#121212;
-  font-weight: 500;
+.alert-guessed{
+  background-color: #000;
+}
+.wrong-message {
+	color: transparent;
+	font-family: "Russo One", sans-serif;
+	text-transform: uppercase;
+	font-size: 2em;
+	transform: translatey(25px);
+	background: linear-gradient(
+		rgb(243, 92, 92) 30%,
+		white,
+		rgb(245, 92, 32) 60%,
+		rgb(51, 11, 30) 100%
+	);
+	background-size: contain;
+	-webkit-background-clip: text;
+	-webkit-text-stroke: 1px rgb(0, 0, 0);
+	filter: drop-shadow(5px 5px 1px black) drop-shadow(1px 1px 1px rgb(226, 31, 80));
+	animation: bg-shift 0.5s ease-in-out infinite alternate;
 }
 
+.wrong-word {
+    color: white;
+	font-family: "Russo One";
+	font-weight: 300;
+	font-size: 1.3em;
+	padding: 30px;
+	text-shadow: 0 0 3px rgb(233, 233, 233), 0 0 7px rgb(117, 66, 238), 0 0 15px black, 0 0 15px black;
+	
+}
 .correct {
   color: green;
 }
@@ -308,8 +401,6 @@ nav h1 {
 }
 
 
-
-
 .profile-container {
     width: 50%;
     padding: 100px;
@@ -326,8 +417,32 @@ nav h1 {
   text-align: center;
   padding: 100px;
   color: azure;
-  
 }
+
+.scoreboard-title{
+  color: transparent;
+	font-family: "Russo One", sans-serif;
+	text-transform: uppercase;
+	font-size: 5em;
+	transform: translatey(5px);
+	background: linear-gradient(
+		cornflowerblue 30%,
+		white,
+		darkmagenta 60%,
+		cornflowerblue 100%
+	);
+	background-size: contain;
+	-webkit-background-clip: text;
+	-webkit-text-stroke: 1px silver;
+	filter: drop-shadow(5px 5px 1px black) drop-shadow(1px 1px 1px magenta);
+	animation: bg-shift 0.5s ease-in-out infinite alternate;
+}
+
+.scoreboard-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
 .score_table{
   width: 60%;
 }
@@ -354,8 +469,25 @@ nav h1 {
   position: relative;
   width: 100%; 
   height: 100px; 
+  margin-top: 30px;
 }
-
+.top-players-header{
+  color: transparent;
+	font-family: "Russo One", sans-serif;
+	font-size: 1em;
+	transform: translatey(2px);
+	background: linear-gradient(
+		cornflowerblue 30%,
+		rgb(148, 0, 247),
+		darkmagenta 60%,
+		cornflowerblue 100%
+	);
+	background-size: contain;
+	-webkit-background-clip: text;
+	-webkit-text-stroke: 1px silver;
+	filter: drop-shadow(5px 5px 1px black) drop-shadow(1px 1px 1px magenta);
+	animation: bg-shift 0.5s ease-in-out infinite alternate;
+}
 .top-players-list {
   list-style:disc;
   margin: 0;
@@ -420,6 +552,7 @@ nav h1 {
   position: relative;
   z-index: 0;
   border-radius: 10px;
+  transform: scale(1.2);
 }
 
 .glow-on-hover:before {
@@ -427,7 +560,7 @@ nav h1 {
   background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
   position: absolute;
   top: -2px;
-  left:-2px;
+  left:-1px;
   background-size: 400%;
   z-index: -1;
   filter: blur(5px);
@@ -435,23 +568,25 @@ nav h1 {
   height: calc(100% + 4px);
   animation: glowing 20s linear infinite;
   opacity: 1;
+  
   transition: opacity .3s ease-in-out;
   border-radius: 10px;
 }
 
 .glow-on-hover:active {
   color: #000
+  
 }
 
 .glow-on-hover:active:after {
   background: transparent;
   transition: transform 0.2s ease-in-out;
-  transform: scale(1.1);
+  transform: scale(1.2);
+  
 }
 
 .glow-on-hover:hover:before {
   opacity: 1;
- 
   transform: scale(1);
 }
 .glow-on-hover.clicked {
@@ -470,7 +605,13 @@ nav h1 {
   font-weight: bolder;
   border-radius: 10px;
 }
-
+.new-g-btn{
+  color: white;
+	font-weight: 100;
+	font-size: 1.4em;
+	text-shadow: 0 0 3px magenta, 0 0 7px magenta, 0 0 15px black, 0 0 15px black;
+	animation: hover 1s ease-in-out infinite;
+}
 @keyframes glowing {
   0% { background-position: 0 0; }
   50% { background-position: 400% 0; }

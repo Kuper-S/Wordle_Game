@@ -21,7 +21,8 @@ function HomeGameBtn() {
         type="button"
         onClick={handleToGame}
       >
-        NEW GAME🕹️
+      <h1 className="new-g-btn">NEW GAME🕹️</h1>
+        
       </button>
     </div>
   );

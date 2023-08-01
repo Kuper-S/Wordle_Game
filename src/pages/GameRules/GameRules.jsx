@@ -13,7 +13,7 @@ function GameRules() {
 
   return (
     <div className="game-rules-container">
-      <h2 className="game-rules-title">Game Rules</h2>
+      <h3 className="game-rules-title">Game Rules</h3>
       <ol className="game-rules-ol">
         <li>Objective: Guess the secret five-letter word within six attempts to earn points.</li>
         <li>You can enter one letter per attempt to form a word.</li>
@@ -24,7 +24,7 @@ function GameRules() {
         <li>After six attempts, the round ends, and the correct word will be revealed.</li>
       </ol>
 
-      <h2 className="game-rules-title">Score Logic Explanation</h2>
+      <h3 className="game-rules-title">Score Logic Explanation</h3>
       <p className="game-rules-text">
         The scoring is based on the number of attempts it takes to correctly guess the word.
         In case of a tie (two or more players guessing the same number of words),
