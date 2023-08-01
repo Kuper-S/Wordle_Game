@@ -40,6 +40,7 @@ function GamePage() {
     showEndGameButton: false,
     setDisabledLetters: () => {},
   });
+  // eslint-disable-next-line
   const [loadingDataScoreboard, setLoadingDataScoreboard ] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);

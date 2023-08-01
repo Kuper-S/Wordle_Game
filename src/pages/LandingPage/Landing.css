@@ -1,7 +1,7 @@
 .landing {
   min-height: calc(100vh -3rem);
   display: flex;
-  margin-top: 100px;
+  margin-top: 30px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -27,12 +27,23 @@
   color:white;
   font-weight:bolder;
 }
-
+.landing_welcome{
+  padding-bottom: 40px;
+  text-transform: uppercase;
+  font-size: 4em;
+  transform: translatey(25px);
+  background: linear-gradient( rgb(164, 100, 237) 30%, white, darkmagenta 60%, cornflowerblue 100% );
+  background-size: contain;
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 1px silver;
+  filter: drop-shadow(5px 5px 1px black) drop-shadow(1px 1px 1px magenta);
+  animation: bg-shift 0.5s ease-in-out infinite alternate;
+}
 .landing_title{
   font-family: "Russo One", sans-serif;
   padding-bottom: 50px;
   text-transform: uppercase;
-  font-size: 2.8em;
+  font-size: 2.5em;
   transform: translatey(25px);
   background: linear-gradient( cornflowerblue 30%, white, darkmagenta 60%, cornflowerblue 100% );
   background-size: contain;
@@ -44,9 +55,9 @@
 
 .landing_subtitle{
   
-  padding-bottom: 50px;
+  padding-bottom: 10px;
   text-transform: uppercase;
-  font-size: 2em;
+  font-size: 1.3em;
   transform: translatey(25px);
   background: linear-gradient( rgb(164, 100, 237) 30%, white, darkmagenta 60%, cornflowerblue 100% );
   background-size: contain;
@@ -81,18 +92,21 @@
   max-width: 100%;
   object-fit: cover;
 }
-.landing-btn {
-  display: flex;
+.landing-btn-in {
+  display:inline-block;
   flex-direction: column;
-  padding: 100px;
-  margin-bottom: 30px;
-  
+  padding: 20px;
 }
 
+.landing-btn-out {
+  display:inline-block;
+  flex-direction: column;
+  padding: 20px;
+}
 @media (max-width: 1200px) {
   .landing .wrapper {
-    min-height: 60vh;
-    padding: 1rem;
+    min-height: 100vh;
+    padding: 2rem;
   }
 
   .landing .graph {
