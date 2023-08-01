@@ -7,7 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Landing from "../LandingPage/Landing";
 import HomeGameBtn from "../../components/Buttons/HomeGameBtn";
 import AnimatedTitle from "../../assets/AnimatedTitle/animatedTitle";
-import StyledHeader from "../../assets/styledHeader/styledHeader";
 const Home = () => {
   const { currentUser, logOut } = useAuth();
   const navigate = useNavigate();

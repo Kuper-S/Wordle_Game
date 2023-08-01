@@ -22,9 +22,7 @@ function App() {
   return (
     <div className="App">
       <AuthProvider>
-       
         <ResponsiveAppBar />
-
           <Routes>
               <Route path="/" element={<Landing />} />
               {currentUser && <Route path="/home" element={<Home />} />}
@@ -46,7 +44,6 @@ function App() {
               )}
           </Routes>
           <Footer />
-       
       </AuthProvider>
     </div>
   );
